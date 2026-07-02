@@ -59,11 +59,6 @@ The goal is to **simplify mission planning and inspire innovation** in space tec
   - Thrust-to-weight balance  
 - Helps determine if a mission concept is **realistic or needs redesign**.  
 
-> Formula example:  
-> \[
-> \text{Escape Velocity} = \sqrt{\frac{2GM}{R}}
-> \]
-
 ---
 
 ### 🛰️ 4. Launch & Entry Dynamics
