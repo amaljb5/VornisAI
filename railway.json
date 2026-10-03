@@ -1,6 +1,6 @@
 {
   "$schema": "https://railway.com/railway.schema.json",
   "deploy": {
-    "startCommand": "gunicorn --bind 0.0.0.0:${PORT:-8000} api.index:app"
+    "startCommand": "streamlit run ml/app.py --server.port $PORT --server.address 0.0.0.0"
   }
 }
