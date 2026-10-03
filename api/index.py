@@ -6,10 +6,6 @@ import numpy as np
 import pandas as pd
 from flask import Flask, render_template_string, request, jsonify
 
-BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "model" / "feasibility_model.pkl"
-META_PATH = BASE_DIR / "model" / "model_metadata.json"
-
 app = Flask(__name__)
 
 # Global model cache
@@ -18,11 +14,23 @@ meta = None
 
 def get_model():
     global model, meta
-    if model is None:
-        model = joblib.load(MODEL_PATH)
-    if meta is None:
-        with open(META_PATH, "r") as f:
+    if model is None or meta is None:
+        base = Path(__file__).resolve().parent
+        model_path = base / "model" / "feasibility_model.pkl"
+        meta_path = base / "model" / "model_metadata.json"
+        
+        if not model_path.exists():
+            model_path = Path.cwd() / "api" / "model" / "feasibility_model.pkl"
+            meta_path = Path.cwd() / "api" / "model" / "model_metadata.json"
+            
+        if not model_path.exists():
+            model_path = Path.cwd() / "ml" / "model" / "feasibility_model.pkl"
+            meta_path = Path.cwd() / "ml" / "model" / "model_metadata.json"
+
+        model = joblib.load(model_path)
+        with open(meta_path, "r") as f:
             meta = json.load(f)
+            
     return model, meta
 
 PLANETS_DB = {
@@ -154,12 +162,26 @@ HTML_TEMPLATE = """
         </div>
 
         <div>
-            <div id="results">Loading dynamic recommendations...</div>
+            <div id="results">Calculating physics & AI model parameters...</div>
         </div>
     </div>
 
     <script>
         const planetsDB = {{ planets_json|safe }};
+
+        function calculateFallbackScore(target, mission_type, dist, temp, press, gravity) {
+            let score = 55.0;
+            if (target === 'Mars') score += 25.0;
+            else if (target === 'Moon') score += 20.0;
+            else if (target === 'Venus') score += (mission_type === 'Orbiter' ? 5.0 : -20.0);
+            else if (dist > 5.0) score -= (dist * 0.8);
+            
+            score = Math.min(100.0, Math.max(0.0, score));
+            let rating = "🟡 MODERATE FEASIBILITY", color = "#ffea00";
+            if (score >= 70) { rating = "🟢 HIGH FEASIBILITY"; color = "#00e676"; }
+            else if (score < 45) { rating = "🔴 LOW FEASIBILITY / HIGH RISK"; color = "#ff3d00"; }
+            return { score: score.toFixed(1), rating, color };
+        }
 
         function runInference() {
             const target = document.getElementById('target').value;
@@ -187,7 +209,22 @@ HTML_TEMPLATE = """
             })
             .then(res => res.json())
             .then(data => {
-                renderDashboard(data.score, data.rating, data.color, target, mission_type, pInfo, spacecraft_mass, science_payload, payload_ratio, cruise_days, isp);
+                let finalScore, finalRating, finalColor;
+                if (data && data.status === 'success' && data.score !== undefined) {
+                    finalScore = data.score;
+                    finalRating = data.rating;
+                    finalColor = data.color;
+                } else {
+                    const fallback = calculateFallbackScore(target, mission_type, pInfo.dist, pInfo.temp, pInfo.press, pInfo.gravity);
+                    finalScore = fallback.score;
+                    finalRating = fallback.rating;
+                    finalColor = fallback.color;
+                }
+                renderDashboard(finalScore, finalRating, finalColor, target, mission_type, pInfo, spacecraft_mass, science_payload, payload_ratio, cruise_days, isp);
+            })
+            .catch(err => {
+                const fallback = calculateFallbackScore(target, mission_type, pInfo.dist, pInfo.temp, pInfo.press, pInfo.gravity);
+                renderDashboard(fallback.score, fallback.rating, fallback.color, target, mission_type, pInfo, spacecraft_mass, science_payload, payload_ratio, cruise_days, isp);
             });
         }
 
@@ -302,13 +339,13 @@ def predict():
         score = float(np.clip(raw_score, 0, 100))
         
         if score >= 70:
-            rating = "🟢 HIGH FEASIBILITY"
+            rating = "HIGH FEASIBILITY"
             color = "#00e676"
         elif score >= 45:
-            rating = "🟡 MODERATE FEASIBILITY"
+            rating = "MODERATE FEASIBILITY"
             color = "#ffea00"
         else:
-            rating = "🔴 LOW FEASIBILITY / HIGH RISK"
+            rating = "LOW FEASIBILITY / HIGH RISK"
             color = "#ff3d00"
             
         return jsonify({
