@@ -6,16 +6,24 @@ import numpy as np
 import pandas as pd
 from flask import Flask, render_template_string, request, jsonify
 
-BASE_DIR = Path(__file__).resolve().parent.parent / "ml"
+BASE_DIR = Path(__file__).resolve().parent
 MODEL_PATH = BASE_DIR / "model" / "feasibility_model.pkl"
 META_PATH = BASE_DIR / "model" / "model_metadata.json"
 
 app = Flask(__name__)
 
-# Load model and metadata
-model = joblib.load(MODEL_PATH)
-with open(META_PATH, "r") as f:
-    meta = json.load(f)
+# Global model cache
+model = None
+meta = None
+
+def get_model():
+    global model, meta
+    if model is None:
+        model = joblib.load(MODEL_PATH)
+    if meta is None:
+        with open(META_PATH, "r") as f:
+            meta = json.load(f)
+    return model, meta
 
 PLANETS_DB = {
     "Mercury": {"dist": 0.387, "mass": 0.330, "radius": 2439, "gravity": 3.70, "temp": 167, "press": 1e-11, "mag": 0, "gas": 0, "solid": 1, "desc": "Extreme thermal fluctuations, high solar radiation, thin exosphere."},
@@ -264,6 +272,8 @@ def index():
 def predict():
     try:
         data = request.get_json()
+        model_obj, _ = get_model()
+        
         input_dict = {
             "target": data.get("target"),
             "mission_type": data.get("mission_type"),
@@ -288,7 +298,7 @@ def predict():
         }
         
         input_df = pd.DataFrame([input_dict])
-        raw_score = model.predict(input_df)[0]
+        raw_score = model_obj.predict(input_df)[0]
         score = float(np.clip(raw_score, 0, 100))
         
         if score >= 70:
@@ -308,7 +318,7 @@ def predict():
             "color": color
         })
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 400
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 # Vercel entry point export
 handler = app
