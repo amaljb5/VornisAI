@@ -283,16 +283,33 @@ with col_score_l:
 
 with col_score_r:
     st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
-    st.markdown("#### 📋 Core Mission Metrics")
-    m_c1, m_c2 = st.columns(2)
-    with m_c1:
-        st.metric("Target Destination", target_planet)
-        st.metric("Distance from Sun", f"{dist_au:.3f} AU")
-        st.metric("Payload Mass Ratio", f"{(science_payload/spacecraft_mass)*100:.1f} %")
-    with m_c2:
-        st.metric("Architecture", mission_type)
-        st.metric("Est. Cruise Time", f"{cruise_days:.0f} days")
-        st.metric("Historical Precedent", "Yes" if hist_success == 1 else "No")
+    st.markdown("#### 🔍 AI Feasibility Score Breakdown & Driving Factors")
+    
+    reasons = []
+    if press_bar > 10.0 and mission_type in ["Lander", "Rover"]:
+        reasons.append(f"⚠️ **Atmospheric Overpressure:** Extreme surface pressure ({press_bar} bar) imposes structural crush hazard for surface landing.")
+    elif press_bar > 0.001:
+        reasons.append("💨 **Aero-braking Capability:** Atmosphere presence enables aerodynamic deceleration, reducing propellant needed for orbital entry.")
+
+    if temp_c > 300.0:
+        reasons.append(f"🔥 **Extreme Surface Thermal Load:** Surface temperature ({temp_c}°C) degrades standard avionics and solar cells without active cooling.")
+    elif temp_c < -150.0:
+        reasons.append(f"❄️ **Cryogenic Environment:** Deep space cold ({temp_c}°C) mandates Radioisotope Heater Units (RHUs) to prevent propellant freezing.")
+
+    if dist_au > 4.0:
+        reasons.append(f"🌌 **Deep Solar Distance:** At {dist_au:.2f} AU, solar flux drops by >93%, ruling out standard solar arrays and mandating MMRTG nuclear power.")
+    else:
+        reasons.append(f"☀️ **High Solar Flux:** Orbital radius ({dist_au:.2f} AU) allows lightweight GaAs solar arrays.")
+
+    if target_planet in ["Mars", "Moon"]:
+        reasons.append("✅ **Proven Flight Heritage:** Target has high historical success rates (TRL 8-9) with extensive telemetry.")
+
+    if mission_type == "Flyby":
+        reasons.append("🚀 **Simplified Trajectory:** Flyby avoids entry, descent, landing (EDL), and orbit insertion burn hazards.")
+
+    for r in reasons:
+        st.markdown(f"- {r}")
+        
     st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================================================
@@ -417,7 +434,7 @@ col_dyn1, col_dyn2 = st.columns(2)
 with col_dyn1:
     st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
     st.markdown("#### 📐 Hohmann Transfer Dynamics")
-    st.metric("Estimated Transfer Delta-V ($\Delta v$)", f"{delta_v_launch:.2f} km/s")
+    st.metric(r"Estimated Transfer Delta-V ($\Delta v$)", f"{delta_v_launch:.2f} km/s")
     st.metric("Theoretical Orbital Transfer Time", f"{transfer_days:.0f} days (~{time_years:.2f} years)")
     st.markdown("</div>", unsafe_allow_html=True)
 

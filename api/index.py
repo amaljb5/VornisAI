@@ -101,6 +101,13 @@ HTML_TEMPLATE = """
             border: 1px solid rgba(122, 92, 255, 0.3); margin-bottom: 20px;
         }
         .score-num { font-family: 'Outfit', sans-serif; font-size: 4.5rem; font-weight: 700; line-height: 1; margin: 10px 0; }
+        .reason-card {
+            background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px; padding: 16px; margin-top: 15px; text-align: left;
+        }
+        .reason-card h4 { color: #38bdf8; font-size: 0.95rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .reason-card ul { list-style: none; padding: 0; }
+        .reason-card li { margin-bottom: 8px; font-size: 0.92rem; line-height: 1.45; color: #cbd5e1; }
         .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media(max-width: 700px) { .rec-grid { grid-template-columns: 1fr; } }
         .rec-box {
@@ -169,6 +176,38 @@ HTML_TEMPLATE = """
     <script>
         const planetsDB = {{ planets_json|safe }};
 
+        function generateReasons(target, mission_type, pInfo, mass, payload_ratio, days, score) {
+            let reasons = [];
+            
+            if (pInfo.press > 10.0 && (mission_type === 'Lander' || mission_type === 'Rover')) {
+                reasons.push("⚠️ <strong>Atmospheric Overpressure:</strong> Extreme surface pressure (" + pInfo.press + " bar) imposes structural crush hazard for surface landing.");
+            } else if (pInfo.press > 0.001) {
+                reasons.push("💨 <strong>Aero-braking Capability:</strong> Atmosphere presence enables aerodynamic deceleration, reducing propellant needed for orbital entry.");
+            }
+
+            if (pInfo.temp > 300.0) {
+                reasons.push("🔥 <strong>Extreme Surface Thermal Load:</strong> Surface temperature (" + pInfo.temp + "°C) degrades standard avionics and solar cells without active cooling.");
+            } else if (pInfo.temp < -150.0) {
+                reasons.push("❄️ <strong>Cryogenic Environment:</strong> Deep space cold (" + pInfo.temp + "°C) mandates Radioisotope Heater Units (RHUs) to prevent propellant freezing.");
+            }
+
+            if (pInfo.dist > 4.0) {
+                reasons.push("🌌 <strong>Deep Solar Distance:</strong> At " + pInfo.dist + " AU, solar flux drops by >93%, ruling out standard solar arrays and mandating MMRTG nuclear power.");
+            } else {
+                reasons.push("☀️ <strong>High Solar Flux:</strong> Orbital radius (" + pInfo.dist + " AU) allows lightweight GaAs solar arrays.");
+            }
+
+            if (target === 'Mars' || target === 'Moon') {
+                reasons.push("✅ <strong>Proven Flight Heritage:</strong> Target has high historical success rates (TRL 8-9) with extensive telemetry.");
+            }
+
+            if (mission_type === 'Flyby') {
+                reasons.push("🚀 <strong>Simplified Trajectory:</strong> Flyby avoids entry, descent, landing (EDL), and orbit insertion burn hazards.");
+            }
+
+            return reasons;
+        }
+
         function calculateFallbackScore(target, mission_type, dist, temp, press, gravity) {
             let score = 55.0;
             if (target === 'Mars') score += 25.0;
@@ -177,9 +216,9 @@ HTML_TEMPLATE = """
             else if (dist > 5.0) score -= (dist * 0.8);
             
             score = Math.min(100.0, Math.max(0.0, score));
-            let rating = "🟡 MODERATE FEASIBILITY", color = "#ffea00";
-            if (score >= 70) { rating = "🟢 HIGH FEASIBILITY"; color = "#00e676"; }
-            else if (score < 45) { rating = "🔴 LOW FEASIBILITY / HIGH RISK"; color = "#ff3d00"; }
+            let rating = "MODERATE FEASIBILITY", color = "#ffea00";
+            if (score >= 70) { rating = "HIGH FEASIBILITY"; color = "#00e676"; }
+            else if (score < 45) { rating = "LOW FEASIBILITY / HIGH RISK"; color = "#ff3d00"; }
             return { score: score.toFixed(1), rating, color };
         }
 
@@ -245,12 +284,20 @@ HTML_TEMPLATE = """
             const mass_ratio = Math.exp(req_dv / (isp * 9.80665)).toFixed(2);
             const prop_mass = (mass * (1 - (1 / mass_ratio))).toFixed(0);
 
+            const reasons = generateReasons(target, mission_type, pInfo, mass, payload_ratio, days, score);
+            const reasonsHTML = reasons.map(r => `<li>${r}</li>`).join('');
+
             document.getElementById('results').innerHTML = `
                 <div class="section-title">📊 1. Mission Feasibility AI Score</div>
                 <div class="score-card">
                     <div style="color:#94a3b8; font-size:0.85rem; text-transform:uppercase; letter-spacing:2px;">Mission Feasibility Score</div>
                     <div class="score-num" style="color:${color}">${score}</div>
                     <div style="font-weight:600; color:${color}">${rating}</div>
+                    
+                    <div class="reason-card">
+                        <h4>🔍 Score Breakdown & Driving Factors</h4>
+                        <ul>${reasonsHTML}</ul>
+                    </div>
                 </div>
 
                 <div class="section-title">🧠 2. AI Vehicle Design Recommendations</div>
@@ -359,3 +406,7 @@ def predict():
 
 # Vercel entry point export
 handler = app
+
+if __name__ == "__main__":
+    print("Starting VornisAI local server on http://127.0.0.1:5000 ...")
+    app.run(host="127.0.0.1", port=5000, debug=True)
