@@ -1,0 +1,146 @@
+{
+  "target": "feasibility_score",
+  "cat_features": [
+    "target",
+    "mission_type"
+  ],
+  "num_features": [
+    "cruise_days",
+    "spacecraft_mass_kg",
+    "science_payload_kg",
+    "historical_success",
+    "distance_AU",
+    "mass_1e24_kg",
+    "radius_km",
+    "gravity_m_s2",
+    "escape_velocity_km_s",
+    "temperature_C",
+    "pressure_bar",
+    "global_magnetic_field",
+    "gas_giant",
+    "solid_surface",
+    "is_orbiter",
+    "is_rover",
+    "is_lander",
+    "is_flyby"
+  ],
+  "cat_unique_values": {
+    "target": [
+      "Europa",
+      "Jupiter",
+      "Mars",
+      "Mercury",
+      "Neptune",
+      "Pluto",
+      "Saturn",
+      "Titan",
+      "Uranus",
+      "Venus"
+    ],
+    "mission_type": [
+      "Flyby",
+      "Lander",
+      "Orbiter",
+      "Rover"
+    ]
+  },
+  "num_feature_stats": {
+    "cruise_days": {
+      "min": 109.0,
+      "max": 4388.0,
+      "median": 399.0
+    },
+    "spacecraft_mass_kg": {
+      "min": 202.8,
+      "max": 6000.0,
+      "median": 1035.0
+    },
+    "science_payload_kg": {
+      "min": 50.0,
+      "max": 75.0,
+      "median": 62.0
+    },
+    "historical_success": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 1.0
+    },
+    "distance_AU": {
+      "min": 0.387,
+      "max": 39.48,
+      "median": 1.524
+    },
+    "mass_1e24_kg": {
+      "min": 0.01303,
+      "max": 1898.125,
+      "median": 0.641691
+    },
+    "radius_km": {
+      "min": 1188.3,
+      "max": 69911.0,
+      "median": 3389.5
+    },
+    "gravity_m_s2": {
+      "min": 0.62,
+      "max": 24.79,
+      "median": 3.71
+    },
+    "escape_velocity_km_s": {
+      "min": 1.21,
+      "max": 60.2,
+      "median": 5.03
+    },
+    "temperature_C": {
+      "min": -225.0,
+      "max": 464.0,
+      "median": -65.0
+    },
+    "pressure_bar": {
+      "min": 1e-11,
+      "max": 92.0,
+      "median": 0.0069
+    },
+    "global_magnetic_field": {
+      "min": 0.0,
+      "max": 0.0,
+      "median": 0.0
+    },
+    "gas_giant": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0
+    },
+    "solid_surface": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 1.0
+    },
+    "is_orbiter": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0
+    },
+    "is_rover": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0
+    },
+    "is_lander": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0
+    },
+    "is_flyby": {
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0
+    }
+  },
+  "metrics": {
+    "MAE": 6.68,
+    "RMSE": 9.31,
+    "R2": 0.6994
+  },
+  "dataset_rows": 20,
+  "model_file": "feasibility_model.pkl"
+}

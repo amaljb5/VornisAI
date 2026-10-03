@@ -1,0 +1,21 @@
+mission,target,mission_type,cruise_days,spacecraft_mass_kg,science_payload_kg,historical_success,outcome,distance_AU,mass_1e24_kg,radius_km,gravity_m_s2,escape_velocity_km_s,temperature_C,pressure_bar,global_magnetic_field,gas_giant,solid_surface,is_orbiter,is_rover,is_lander,is_flyby,feasibility_score,feasibility_label
+Mariner 10,Mercury,Flyby,146.0,502.9,,1,Success,0.387,0.330103,2439.4,3.7,4.25,167,1e-11,0,0,1,0,0,0,1,55,0
+MESSENGER,Mercury,Orbiter,,1107.0,,1,Success,0.387,0.330103,2439.4,3.7,4.25,167,1e-11,0,0,1,1,0,0,0,35,0
+Mariner 2,Venus,Flyby,109.0,202.8,,1,Success,0.723,4.86731,6051.8,8.87,10.36,464,92.0,0,0,1,0,0,0,1,55,0
+Magellan,Venus,Orbiter,463.0,1035.0,,1,Success,0.723,4.86731,6051.8,8.87,10.36,464,92.0,0,0,1,1,0,0,0,50,0
+Mariner 9,Mars,Orbiter,168.0,558.0,,1,Success,1.524,0.641691,3389.5,3.71,5.03,-65,0.0069,0,0,1,1,0,0,0,65,1
+Viking 1,Mars,Lander,335.0,3530.0,,1,Success,1.524,0.641691,3389.5,3.71,5.03,-65,0.0069,0,0,1,0,0,1,0,80,1
+Curiosity,Mars,Rover,254.0,3893.0,75.0,1,Success,1.524,0.641691,3389.5,3.71,5.03,-65,0.0069,0,0,1,0,1,0,0,80,1
+InSight,Mars,Lander,205.0,694.0,50.0,1,Success,1.524,0.641691,3389.5,3.71,5.03,-65,0.0069,0,0,1,0,0,1,0,85,1
+Perseverance,Mars,Rover,203.0,1025.0,59.0,1,Success,1.524,0.641691,3389.5,3.71,5.03,-65,0.0069,0,0,1,0,1,0,0,85,1
+MRO,Mars,Orbiter,210.0,2180.0,,1,Success,1.524,0.641691,3389.5,3.71,5.03,-65,0.0069,0,0,1,1,0,0,0,65,1
+MAVEN,Mars,Orbiter,307.0,2454.0,65.0,1,Success,1.524,0.641691,3389.5,3.71,5.03,-65,0.0069,0,0,1,1,0,0,0,60,1
+Pioneer 10,Jupiter,Flyby,641.0,,,1,Success,5.203,1898.125,69911.0,24.79,60.2,-110,,0,1,0,0,0,0,1,55,0
+Galileo,Jupiter,Orbiter,2241.0,2223.0,,1,Success,5.203,1898.125,69911.0,24.79,60.2,-110,,0,1,0,1,0,0,0,50,0
+Juno,Jupiter,Orbiter,1795.0,3625.0,,1,Success,5.203,1898.125,69911.0,24.79,60.2,-110,,0,1,0,1,0,0,0,50,0
+Cassini,Saturn,Orbiter,2451.0,5712.0,,1,Success,9.537,568.317,58232.0,10.44,36.09,-140,,0,1,0,1,0,0,0,45,0
+Huygens,Titan,Lander,2648.0,318.0,,1,Success,9.58,0.13452,2574.7,1.35,2.64,-179,1.46,0,0,1,0,0,1,0,65,1
+Voyager 2,Uranus,Flyby,3079.0,825.0,,1,Success,19.19,86.8099,25362.0,8.87,21.38,-195,,0,1,0,0,0,0,1,35,0
+Voyager 2,Neptune,Flyby,4388.0,825.0,,1,Success,30.07,102.4092,24622.0,11.15,23.56,-200,,0,1,0,0,0,0,1,35,0
+New Horizons,Pluto,Flyby,3464.0,478.0,,1,Success,39.48,0.01303,1188.3,0.62,1.21,-225,1e-05,0,0,1,0,0,0,1,35,0
+Europa Clipper,Europa,Orbiter,,6000.0,,0,Planned,5.2,0.048,1560.8,1.31,2.03,-160,,0,0,1,1,0,0,0,30,0
