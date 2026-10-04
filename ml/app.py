@@ -192,23 +192,80 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# ── Fuzzy-match helpers ───────────────────────────────────────────────────
+def _resolve_planet(raw: str) -> str:
+    """Case-insensitive fuzzy match against PLANETS_DB keys."""
+    txt = raw.strip()
+    if not txt:
+        return "Mars"
+    # Exact (case-insensitive)
+    for name in PLANETS_DB:
+        if name.lower() == txt.lower():
+            return name
+    # Prefix
+    for name in PLANETS_DB:
+        if name.lower().startswith(txt.lower()):
+            return name
+    # Substring
+    for name in PLANETS_DB:
+        if txt.lower() in name.lower():
+            return name
+    return txt  # unknown body – will use fallback data
+
+MISSION_TYPES = ["Orbiter", "Rover", "Lander", "Flyby"]
+
+def _resolve_mission(raw: str) -> str:
+    """Case-insensitive fuzzy match against known mission architectures."""
+    txt = raw.strip()
+    if not txt:
+        return "Orbiter"
+    for m in MISSION_TYPES:
+        if m.lower() == txt.lower():
+            return m
+    for m in MISSION_TYPES:
+        if m.lower().startswith(txt.lower()):
+            return m
+    for m in MISSION_TYPES:
+        if txt.lower() in m.lower():
+            return m
+    return txt
+
+# Fallback planet data for unknown bodies
+_FALLBACK_PLANET = {
+    "dist": 1.5, "mass": 0.5, "radius": 3000, "gravity": 4.0,
+    "temp": -60, "press": 0.01, "mag": 0, "gas": 0, "solid": 1,
+    "desc": "Custom / unknown body — using estimated parameters."
+}
+
 # ── Sidebar Inputs ────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("### 🪐 Mission Configuration")
-    
-    target_planet = st.selectbox("Target Celestial Body", list(PLANETS_DB.keys()), index=4)
-    planet_info = PLANETS_DB[target_planet]
-    
-    mission_type = st.selectbox("Mission Architecture", ["Orbiter", "Rover", "Lander", "Flyby"], index=0)
-    
+
+    raw_planet = st.text_input(
+        "Target Celestial Body",
+        value="Mars",
+        placeholder="e.g. Mars, Europa, Titan…",
+        help="Type any planet or moon name. Suggestions: " + ", ".join(PLANETS_DB.keys()),
+    )
+    target_planet = _resolve_planet(raw_planet)
+    planet_info = PLANETS_DB.get(target_planet, _FALLBACK_PLANET)
+
+    raw_mission = st.text_input(
+        "Mission Architecture",
+        value="Orbiter",
+        placeholder="e.g. Orbiter, Rover, Lander, Flyby",
+        help="Type a mission type. Options: Orbiter, Rover, Lander, Flyby",
+    )
+    mission_type = _resolve_mission(raw_mission)
+
     st.markdown("---")
     st.markdown("### ⚙️ Spacecraft Specs")
-    
+
     cruise_days = st.number_input("Cruise Duration (days)", min_value=1.0, max_value=10000.0, value=250.0, step=10.0)
     spacecraft_mass = st.number_input("Total Mass (kg)", min_value=10.0, max_value=50000.0, value=2200.0, step=100.0)
     science_payload = st.number_input("Science Payload (kg)", min_value=1.0, max_value=5000.0, value=120.0, step=10.0)
     hist_success = st.selectbox("Historical Precedent", [1, 0], format_func=lambda x: "Yes (Target Reached Before)" if x == 1 else "No (New Frontier)")
-    
+
     st.markdown("---")
     st.markdown("### 🚀 Engine & Thruster Specs")
     isp = st.slider("Specific Impulse $I_{sp}$ (seconds)", min_value=200, max_value=4500, value=320, step=10, help="Chemical ~320s, Solar Electric ~3000s")
