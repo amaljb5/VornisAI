@@ -119,6 +119,44 @@ HTML_TEMPLATE = """
         .metric-card { background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); }
         .metric-card span { display: block; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
         .metric-card strong { font-family: 'Outfit', sans-serif; font-size: 1.15rem; color: #38bdf8; }
+
+        /* autocomplete */
+        .ac-wrap { position: relative; }
+        .ac-input {
+            width: 100%; padding: 10px 14px 10px 38px;
+            background: rgba(15,23,42,0.8);
+            border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+            color: #fff; font-size: 0.95rem; outline: none;
+            font-family: inherit; transition: border-color .2s, box-shadow .2s;
+        }
+        .ac-input::placeholder { color: #4a5568; }
+        .ac-input:focus { border-color: #38bdf8; box-shadow: 0 0 0 2px rgba(56,189,248,.15); }
+        .ac-icon {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            font-size: 1rem; pointer-events: none; opacity: .55; line-height: 1;
+        }
+        .ac-dropdown {
+            position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 999;
+            background: rgba(8,16,34,.97); border: 1px solid rgba(56,189,248,.22);
+            border-radius: 12px; overflow: hidden; backdrop-filter: blur(24px);
+            box-shadow: 0 16px 48px rgba(0,0,0,.65); display: none;
+        }
+        .ac-dropdown.open { display: block; animation: acIn .14s ease; }
+        @keyframes acIn { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+        .ac-item {
+            display: flex; align-items: center; gap: 9px;
+            padding: 9px 14px; cursor: pointer; font-size: .91rem; color: #94a3b8;
+            transition: background .12s, color .12s;
+            border-bottom: 1px solid rgba(255,255,255,.04);
+        }
+        .ac-item:last-child { border-bottom: none; }
+        .ac-item:hover, .ac-item.highlighted { background: rgba(56,189,248,.10); color: #e2e8f0; }
+        .ac-badge {
+            margin-left: auto; flex-shrink: 0; font-size: .70rem; color: #7a5cff;
+            background: rgba(122,92,255,.14); padding: 2px 8px; border-radius: 99px; white-space: nowrap;
+        }
+        .ac-no-match { padding: 10px 14px; color: #475569; font-size: .86rem; font-style: italic; }
+        mark { background: rgba(56,189,248,.22); color: #fff; border-radius: 2px; padding: 0 1px; }
     </style>
 </head>
 <body>
@@ -132,21 +170,34 @@ HTML_TEMPLATE = """
             <h3 style="color: #38bdf8; font-family: 'Outfit'; margin-bottom: 15px;">🪐 Mission Config</h3>
             <form id="configForm">
                 <div class="form-group">
+
                     <label>Target Body</label>
-                    <select id="target">
-                        {% for planet in planets %}
-                        <option value="{{ planet }}" {% if planet == 'Mars' %}selected{% endif %}>{{ planet }}</option>
-                        {% endfor %}
-                    </select>
+
+                    <div class="ac-wrap">
+
+                        <span class="ac-icon">&#127760;</span>
+
+                        <input class="ac-input" id="target" type="text" placeholder="e.g. Mars, Europa, Titan..." value="Mars" spellcheck="false">
+
+                        <div class="ac-dropdown" id="planetDrop"></div>
+
+                    </div>
+
                 </div>
                 <div class="form-group">
+
                     <label>Mission Architecture</label>
-                    <select id="mission_type">
-                        <option value="Orbiter" selected>Orbiter</option>
-                        <option value="Rover">Rover</option>
-                        <option value="Lander">Lander</option>
-                        <option value="Flyby">Flyby</option>
-                    </select>
+
+                    <div class="ac-wrap">
+
+                        <span class="ac-icon">&#128752;</span>
+
+                        <input class="ac-input" id="mission_type" type="text" placeholder="e.g. Orbiter, Rover, Lander..." value="Orbiter" spellcheck="false">
+
+                        <div class="ac-dropdown" id="missionDrop"></div>
+
+                    </div>
+
                 </div>
                 <div class="form-group">
                     <label>Total Mass (kg)</label>
@@ -175,6 +226,80 @@ HTML_TEMPLATE = """
 
     <script>
         const planetsDB = {{ planets_json|safe }};
+
+        /* ── Autocomplete factory ── */
+        function makeAutocomplete({ inputId, dropId, items, iconFn, badgeFn }) {
+            const inp  = document.getElementById(inputId);
+            const drop = document.getElementById(dropId);
+            let hiIdx  = -1;
+
+            function score(item, q) {
+                const s = item.toLowerCase(), ql = q.toLowerCase();
+                if (s === ql) return 3;
+                if (s.startsWith(ql)) return 2;
+                if (s.includes(ql)) return 1;
+                return 0;
+            }
+            function hl(text, q) {
+                if (!q) return text;
+                const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+                return text.replace(re, '<mark>$1</mark>');
+            }
+            function selectVal(val) { inp.value = val; drop.classList.remove('open'); }
+            function render(q) {
+                const filtered = q
+                    ? items.map(i => ({ i, s: score(i, q) })).filter(x => x.s > 0).sort((a,b) => b.s-a.s).map(x => x.i)
+                    : items;
+                if (!filtered.length) {
+                    drop.innerHTML = '<div class="ac-no-match">No match &mdash; custom value will be used</div>';
+                } else {
+                    drop.innerHTML = filtered.map(item =>
+                        '<div class="ac-item" data-val="' + item + '">' +
+                        '<span>' + (iconFn ? iconFn(item) : '') + '</span>' +
+                        '<span>' + hl(item, q) + '</span>' +
+                        (badgeFn ? '<span class="ac-badge">' + badgeFn(item) + '</span>' : '') +
+                        '</div>'
+                    ).join('');
+                    drop.querySelectorAll('.ac-item').forEach(el => {
+                        el.addEventListener('mousedown', e => e.preventDefault());
+                        el.addEventListener('click', () => selectVal(el.dataset.val));
+                    });
+                }
+                hiIdx = -1; drop.classList.add('open');
+            }
+            inp.addEventListener('focus', () => render(inp.value));
+            inp.addEventListener('input', () => render(inp.value));
+            inp.addEventListener('blur',  () => setTimeout(() => drop.classList.remove('open'), 160));
+            inp.addEventListener('keydown', e => {
+                const rows = Array.from(drop.querySelectorAll('.ac-item'));
+                if (!rows.length) return;
+                if (e.key === 'ArrowDown') { e.preventDefault(); hiIdx = Math.min(hiIdx+1, rows.length-1); }
+                else if (e.key === 'ArrowUp') { e.preventDefault(); hiIdx = Math.max(hiIdx-1, 0); }
+                else if (e.key === 'Enter' && hiIdx >= 0) { e.preventDefault(); selectVal(rows[hiIdx].dataset.val); return; }
+                else if (e.key === 'Escape') { drop.classList.remove('open'); return; }
+                rows.forEach((r, i) => r.classList.toggle('highlighted', i === hiIdx));
+            });
+        }
+
+        const planetNames = Object.keys(planetsDB);
+        const PLANET_ICONS = { Mercury:'&#9791;', Venus:'&#9792;', Earth:'&#127757;', Moon:'&#127765;', Mars:'&#128308;', Jupiter:'&#129504;', Europa:'&#128309;', Saturn:'&#128344;', Titan:'&#128993;', Uranus:'&#128309;', Neptune:'&#128309;', Pluto:'&#9899;' };
+        makeAutocomplete({ inputId:'target', dropId:'planetDrop', items:planetNames, iconFn: p => PLANET_ICONS[p] || '&#127760;', badgeFn: p => planetsDB[p].dist + ' AU' });
+
+        const MISSION_TYPES = ['Orbiter','Rover','Lander','Flyby'];
+        const MISSION_ICONS = { Orbiter:'&#128752;', Rover:'&#128663;', Lander:'&#128748;', Flyby:'&#128168;' };
+        const MISSION_DESC  = { Orbiter:'Remote sensing', Rover:'Surface mobility', Lander:'Fixed surface', Flyby:'Gravity assist' };
+        makeAutocomplete({ inputId:'mission_type', dropId:'missionDrop', items:MISSION_TYPES, iconFn: m => MISSION_ICONS[m] || '&#128752;', badgeFn: m => MISSION_DESC[m] || '' });
+
+        function normalizeMissionType(raw) {
+            if (!raw) return 'Orbiter';
+            const r = raw.trim().toLowerCase();
+            if (r.startsWith('orb')) return 'Orbiter';
+            if (r.startsWith('rov')) return 'Rover';
+            if (r.startsWith('lan')) return 'Lander';
+            if (r.startsWith('fly') || r === 'fl') return 'Flyby';
+            return raw.trim().charAt(0).toUpperCase() + raw.trim().slice(1);
+        }
+
 
         function generateReasons(target, mission_type, pInfo, mass, payload_ratio, days, score) {
             let reasons = [];
@@ -223,14 +348,17 @@ HTML_TEMPLATE = """
         }
 
         function runInference() {
-            const target = document.getElementById('target').value;
-            const mission_type = document.getElementById('mission_type').value;
+            const rawTarget   = document.getElementById('target').value.trim();
+            const rawMission  = document.getElementById('mission_type').value.trim();
+            const target       = planetNames.find(p => p.toLowerCase() === rawTarget.toLowerCase()) || rawTarget;
+            const mission_type = normalizeMissionType(rawMission);
             const spacecraft_mass = parseFloat(document.getElementById('spacecraft_mass').value) || 2200;
             const science_payload = parseFloat(document.getElementById('science_payload').value) || 120;
             const cruise_days = parseFloat(document.getElementById('cruise_days').value) || 250;
             const isp = parseFloat(document.getElementById('isp').value) || 320;
             
-            const pInfo = planetsDB[target];
+            let pInfo = planetsDB[target];
+            if (!pInfo) { pInfo = { dist:1.5, mass:0.5, radius:3000, gravity:4.0, temp:-60, press:0.01, mag:0, gas:0, solid:1, desc:'Custom body.' }; }
             const payload_ratio = ((science_payload / spacecraft_mass) * 100).toFixed(1);
 
             fetch('/api/predict', {
