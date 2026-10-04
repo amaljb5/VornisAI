@@ -157,13 +157,13 @@ div[data-testid="stMetricValue"] {
 
 # ── Load Model & Metadata ─────────────────────────────────────────────────
 @st.cache_resource
-def load_resources():
+def load_resources_v2():
     model = joblib.load(MODEL_PATH)
     with open(META_PATH, "r") as f:
         meta = json.load(f)
     return model, meta
 
-model, meta = load_resources()
+model, meta = load_resources_v2()
 
 # ── Planetary Database Dictionary ──────────────────────────────────────────
 PLANETS_DB = {

@@ -1,116 +1,109 @@
 {
-  "target": "feasibility_score",
+  "target": "physics_screening_score_0_100",
   "cat_features": [
-    "target",
-    "mission_type"
+    "target_canonical",
+    "mission_type_normalized"
   ],
   "num_features": [
-    "cruise_days",
+    "cruise_duration_days",
     "spacecraft_mass_kg",
-    "science_payload_kg",
-    "historical_success",
-    "distance_AU",
-    "mass_1e24_kg",
-    "radius_km",
-    "gravity_m_s2",
-    "escape_velocity_km_s",
-    "temperature_C",
-    "pressure_bar",
-    "global_magnetic_field",
-    "gas_giant",
-    "solid_surface",
+    "science_payload_mass_kg",
+    "historical_success_label",
+    "target_heliocentric_AU",
+    "target_mass_1e24_kg",
+    "target_radius_km",
+    "target_gravity_m_s2",
+    "target_escape_velocity_km_s",
+    "blackbody_equilibrium_temperature_K",
+    "target_has_conventional_solid_surface",
     "is_orbiter",
     "is_rover",
     "is_lander",
     "is_flyby"
   ],
   "cat_unique_values": {
-    "target": [
+    "target_canonical": [
+      "Ceres",
+      "Earth",
       "Europa",
       "Jupiter",
       "Mars",
       "Mercury",
-      "Neptune",
+      "Moon",
+      "Phobos",
       "Pluto",
       "Saturn",
       "Titan",
-      "Uranus",
       "Venus"
     ],
-    "mission_type": [
-      "Flyby",
-      "Lander",
-      "Orbiter",
-      "Rover"
+    "mission_type_normalized": [
+      "atmospheric_probe",
+      "flyby",
+      "impactor",
+      "lander",
+      "lander + penetrators",
+      "lander_rover",
+      "mixed",
+      "orbiter",
+      "orbiter_flyby",
+      "orbiter_lander",
+      "orbiter_probe",
+      "rover",
+      "sample_return"
     ]
   },
   "num_feature_stats": {
-    "cruise_days": {
-      "min": 109.0,
-      "max": 4388.0,
-      "median": 399.0
+    "cruise_duration_days": {
+      "min": 5.0,
+      "max": 3463.0,
+      "median": 333.5
     },
     "spacecraft_mass_kg": {
-      "min": 202.8,
+      "min": 13.5,
       "max": 6000.0,
-      "median": 1035.0
+      "median": 747.1
     },
-    "science_payload_kg": {
-      "min": 50.0,
-      "max": 75.0,
-      "median": 62.0
+    "science_payload_mass_kg": {
+      "min": 10.6,
+      "max": 185.0,
+      "median": 67.0
     },
-    "historical_success": {
+    "historical_success_label": {
       "min": 0.0,
       "max": 1.0,
       "median": 1.0
     },
-    "distance_AU": {
-      "min": 0.387,
-      "max": 39.48,
-      "median": 1.524
+    "target_heliocentric_AU": {
+      "min": 0.387098,
+      "max": 39.482,
+      "median": 1.0000174
     },
-    "mass_1e24_kg": {
-      "min": 0.01303,
+    "target_mass_1e24_kg": {
+      "min": 1.061e-08,
       "max": 1898.125,
       "median": 0.641691
     },
-    "radius_km": {
-      "min": 1188.3,
+    "target_radius_km": {
+      "min": 11.08,
       "max": 69911.0,
       "median": 3389.5
     },
-    "gravity_m_s2": {
-      "min": 0.62,
+    "target_gravity_m_s2": {
+      "min": 0.0057,
       "max": 24.79,
       "median": 3.71
     },
-    "escape_velocity_km_s": {
-      "min": 1.21,
+    "target_escape_velocity_km_s": {
+      "min": 0.011,
       "max": 60.2,
       "median": 5.03
     },
-    "temperature_C": {
-      "min": -225.0,
-      "max": 464.0,
-      "median": -65.0
+    "blackbody_equilibrium_temperature_K": {
+      "min": 44.32264070887855,
+      "max": 447.62541408307845,
+      "median": 278.49757708161906
     },
-    "pressure_bar": {
-      "min": 1e-11,
-      "max": 92.0,
-      "median": 0.0069
-    },
-    "global_magnetic_field": {
-      "min": 0.0,
-      "max": 0.0,
-      "median": 0.0
-    },
-    "gas_giant": {
-      "min": 0.0,
-      "max": 1.0,
-      "median": 0.0
-    },
-    "solid_surface": {
+    "target_has_conventional_solid_surface": {
       "min": 0.0,
       "max": 1.0,
       "median": 1.0
@@ -137,10 +130,10 @@
     }
   },
   "metrics": {
-    "MAE": 6.68,
-    "RMSE": 9.31,
-    "R2": 0.6994
+    "MAE": 0.5,
+    "RMSE": 1.98,
+    "R2": 0.9868
   },
-  "dataset_rows": 20,
+  "dataset_rows": 118,
   "model_file": "feasibility_model.pkl"
 }
