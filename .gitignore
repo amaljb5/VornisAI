@@ -1,0 +1,15 @@
+# Large ML Datasets (too large for GitHub)
+ml/vornisai_astronomical_ml_dataset.csv
+ml/vornisai_astronomical_ml_dataset_clean.csv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+.venv/
+
+# Environment Variables
+.env
+.env.local
