@@ -212,7 +212,7 @@ def _resolve_planet(raw: str) -> str:
             return name
     return txt  # unknown body – will use fallback data
 
-MISSION_TYPES = ["Orbiter", "Rover", "Lander", "Flyby"]
+MISSION_TYPES = ["Orbiter", "Rover", "Lander", "Flyby", "Sample Return", "Space Telescope", "Crewed"]
 
 def _resolve_mission(raw: str) -> str:
     """Case-insensitive fuzzy match against known mission architectures."""

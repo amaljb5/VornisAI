@@ -285,9 +285,9 @@ HTML_TEMPLATE = """
         const PLANET_ICONS = { Mercury:'&#9791;', Venus:'&#9792;', Earth:'&#127757;', Moon:'&#127765;', Mars:'&#128308;', Jupiter:'&#129504;', Europa:'&#128309;', Saturn:'&#128344;', Titan:'&#128993;', Uranus:'&#128309;', Neptune:'&#128309;', Pluto:'&#9899;' };
         makeAutocomplete({ inputId:'target', dropId:'planetDrop', items:planetNames, iconFn: p => PLANET_ICONS[p] || '&#127760;', badgeFn: p => planetsDB[p].dist + ' AU' });
 
-        const MISSION_TYPES = ['Orbiter','Rover','Lander','Flyby'];
-        const MISSION_ICONS = { Orbiter:'&#128752;', Rover:'&#128663;', Lander:'&#128748;', Flyby:'&#128168;' };
-        const MISSION_DESC  = { Orbiter:'Remote sensing', Rover:'Surface mobility', Lander:'Fixed surface', Flyby:'Gravity assist' };
+        const MISSION_TYPES = ['Orbiter','Rover','Lander','Flyby','Sample Return','Space Telescope','Crewed'];
+        const MISSION_ICONS = { Orbiter:'&#128752;', Rover:'&#128663;', Lander:'&#128748;', Flyby:'&#128168;', 'Sample Return':'&#129532;', 'Space Telescope':'&#128301;', Crewed:'&#128104;&#8205;&#128640;' };
+        const MISSION_DESC  = { Orbiter:'Remote sensing', Rover:'Surface mobility', Lander:'Fixed surface', Flyby:'Gravity assist', 'Sample Return':'Return material to Earth', 'Space Telescope':'Deep space observation', Crewed:'Human spaceflight' };
         makeAutocomplete({ inputId:'mission_type', dropId:'missionDrop', items:MISSION_TYPES, iconFn: m => MISSION_ICONS[m] || '&#128752;', badgeFn: m => MISSION_DESC[m] || '' });
 
         function normalizeMissionType(raw) {
@@ -297,6 +297,9 @@ HTML_TEMPLATE = """
             if (r.startsWith('rov')) return 'Rover';
             if (r.startsWith('lan')) return 'Lander';
             if (r.startsWith('fly') || r === 'fl') return 'Flyby';
+            if (r.startsWith('sam')) return 'Sample Return';
+            if (r.startsWith('tel') || r.startsWith('space tel')) return 'Space Telescope';
+            if (r.startsWith('cre') || r.startsWith('man')) return 'Crewed';
             return raw.trim().charAt(0).toUpperCase() + raw.trim().slice(1);
         }
 
