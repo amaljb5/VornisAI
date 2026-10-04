@@ -241,22 +241,10 @@ _FALLBACK_PLANET = {
 with st.sidebar:
     st.markdown("### 🪐 Mission Configuration")
 
-    raw_planet = st.text_input(
-        "Target Celestial Body",
-        value="Mars",
-        placeholder="e.g. Mars, Europa, Titan…",
-        help="Type any planet or moon name. Suggestions: " + ", ".join(PLANETS_DB.keys()),
-    )
-    target_planet = _resolve_planet(raw_planet)
+    target_planet = st.selectbox("Target Celestial Body", list(PLANETS_DB.keys()), index=4)
     planet_info = PLANETS_DB.get(target_planet, _FALLBACK_PLANET)
 
-    raw_mission = st.text_input(
-        "Mission Architecture",
-        value="Orbiter",
-        placeholder="e.g. Orbiter, Rover, Lander, Flyby",
-        help="Type a mission type. Options: Orbiter, Rover, Lander, Flyby",
-    )
-    mission_type = _resolve_mission(raw_mission)
+    mission_type = st.selectbox("Mission Architecture", MISSION_TYPES, index=0)
 
     st.markdown("---")
     st.markdown("### ⚙️ Spacecraft Specs")
