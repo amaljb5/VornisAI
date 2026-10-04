@@ -36,35 +36,37 @@ warnings.filterwarnings("ignore")
 
 # ── paths ────────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent
-CSV_PATH = BASE_DIR / "vornisAI_FINAL_mission_feasibility_dataset.csv"
+CSV_PATH = BASE_DIR / "vornisai_feasibility_dataset_v2.csv"
 MODEL_DIR = BASE_DIR / "model"
 MODEL_DIR.mkdir(exist_ok=True)
 
 # ── load data ────────────────────────────────────────────────────────────
 print("📂 Loading dataset …")
 df = pd.read_csv(CSV_PATH)
-df = df.dropna(subset=["physics_screening_score_0_100"])
 print(f"   Rows: {len(df)}  |  Columns: {len(df.columns)}")
 
 # ── feature engineering ──────────────────────────────────────────────────
 # Drop identifiers & the label column (keep only features + target)
 DROP_COLS = ["mission", "outcome", "feasibility_label"]
-TARGET = "physics_screening_score_0_100"
+TARGET = "feasibility_score"
 
 # Categorical & numeric feature lists
-CAT_FEATURES = ["target_canonical", "mission_type_normalized"]
+CAT_FEATURES = ["target", "mission_type"]
 NUM_FEATURES = [
-    "cruise_duration_days",
+    "cruise_days",
     "spacecraft_mass_kg",
-    "science_payload_mass_kg",
-    "historical_success_label",
-    "target_heliocentric_AU",
-    "target_mass_1e24_kg",
-    "target_radius_km",
-    "target_gravity_m_s2",
-    "target_escape_velocity_km_s",
-    "blackbody_equilibrium_temperature_K",
-    "target_has_conventional_solid_surface",
+    "science_payload_kg",
+    "historical_success",
+    "distance_AU",
+    "mass_1e24_kg",
+    "radius_km",
+    "gravity_m_s2",
+    "escape_velocity_km_s",
+    "temperature_C",
+    "pressure_bar",
+    "global_magnetic_field",
+    "gas_giant",
+    "solid_surface",
     "is_orbiter",
     "is_rover",
     "is_lander",

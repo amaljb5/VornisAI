@@ -157,24 +157,21 @@ div[data-testid="stMetricValue"] {
 
 # ── Load Model & Metadata ─────────────────────────────────────────────────
 @st.cache_resource
-def load_resources_v2():
+def load_resources():
     model = joblib.load(MODEL_PATH)
     with open(META_PATH, "r") as f:
         meta = json.load(f)
     return model, meta
 
-model, meta = load_resources_v2()
+model, meta = load_resources()
 
 # ── Planetary Database Dictionary ──────────────────────────────────────────
-# Planetary database — includes all targets from the CSV training dataset + Uranus/Neptune
 PLANETS_DB = {
     "Mercury": {"dist": 0.387, "mass": 0.330, "radius": 2439, "gravity": 3.70, "temp": 167, "press": 1e-11, "mag": 0, "gas": 0, "solid": 1, "desc": "Extreme thermal fluctuations, high solar radiation, thin exosphere."},
     "Venus": {"dist": 0.723, "mass": 4.867, "radius": 6051, "gravity": 8.87, "temp": 464, "press": 92.0, "mag": 0, "gas": 0, "solid": 1, "desc": "Dense carbon dioxide atmosphere, supercritical pressures, corrosive sulfuric acid clouds."},
     "Earth": {"dist": 1.000, "mass": 5.972, "radius": 6371, "gravity": 9.81, "temp": 15, "press": 1.013, "mag": 1, "gas": 0, "solid": 1, "desc": "Habitable nitrogen-oxygen atmosphere, protective magnetosphere, liquid surface oceans."},
     "Moon": {"dist": 1.000, "mass": 0.073, "radius": 1737, "gravity": 1.62, "temp": -20, "press": 3e-15, "mag": 0, "gas": 0, "solid": 1, "desc": "Airless vacuum, high micrometeoroid risk, sharp abrasive lunar regolith."},
     "Mars": {"dist": 1.524, "mass": 0.642, "radius": 3389, "gravity": 3.71, "temp": -65, "press": 0.0069, "mag": 0, "gas": 0, "solid": 1, "desc": "Thin CO2 atmosphere, global dust storms, polar ice caps, legacy surface water channels."},
-    "Phobos": {"dist": 1.524, "mass": 1.07e-5, "radius": 11, "gravity": 0.0057, "temp": -40, "press": 0.0, "mag": 0, "gas": 0, "solid": 1, "desc": "Irregular Martian moon, ultra-low gravity, grooved surface, likely captured asteroid."},
-    "Ceres": {"dist": 2.768, "mass": 0.000938, "radius": 470, "gravity": 0.27, "temp": -106, "press": 0.0, "mag": 0, "gas": 0, "solid": 1, "desc": "Largest asteroid belt object, dwarf planet, water-ice subsurface, bright salt deposits."},
     "Jupiter": {"dist": 5.203, "mass": 1898.0, "radius": 69911, "gravity": 24.79, "temp": -110, "press": 100.0, "mag": 1, "gas": 1, "solid": 0, "desc": "Massive gas giant, extreme radiation belts, violent storm systems (Great Red Spot)."},
     "Europa": {"dist": 5.203, "mass": 0.048, "radius": 1560, "gravity": 1.31, "temp": -160, "press": 1e-12, "mag": 0, "gas": 0, "solid": 1, "desc": "Subsurface liquid ocean beneath an ice crust, intense Jovian magnetospheric radiation."},
     "Saturn": {"dist": 9.537, "mass": 568.3, "radius": 58232, "gravity": 10.44, "temp": -140, "press": 100.0, "mag": 1, "gas": 1, "solid": 0, "desc": "Ringed gas giant, low bulk density, extensive satellite system."},
@@ -195,93 +192,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ── Fuzzy-match helpers ───────────────────────────────────────────────────
-def _resolve_planet(raw: str) -> str:
-    """Case-insensitive fuzzy match against PLANETS_DB keys."""
-    txt = raw.strip()
-    if not txt:
-        return "Mars"
-    # Exact (case-insensitive)
-    for name in PLANETS_DB:
-        if name.lower() == txt.lower():
-            return name
-    # Prefix
-    for name in PLANETS_DB:
-        if name.lower().startswith(txt.lower()):
-            return name
-    # Substring
-    for name in PLANETS_DB:
-        if txt.lower() in name.lower():
-            return name
-    return txt  # unknown body – will use fallback data
-
-# All mission architectures — includes every type from the CSV training dataset + extras
-MISSION_TYPES = [
-    "Orbiter", "Rover", "Lander", "Flyby", "Sample Return",
-    "Atmospheric Probe", "Impactor", "Lander + Penetrators",
-    "Lander/Rover", "Orbiter/Flyby", "Orbiter/Lander",
-    "Orbiter/Probe", "Mixed", "Space Telescope", "Crewed",
-]
-
-# Map UI display names → CSV values the ML model was trained on
-MISSION_TO_CSV = {
-    "Orbiter": "orbiter",
-    "Rover": "rover",
-    "Lander": "lander",
-    "Flyby": "flyby",
-    "Sample Return": "sample_return",
-    "Atmospheric Probe": "atmospheric_probe",
-    "Impactor": "impactor",
-    "Lander + Penetrators": "lander + penetrators",
-    "Lander/Rover": "lander_rover",
-    "Orbiter/Flyby": "orbiter_flyby",
-    "Orbiter/Lander": "orbiter_lander",
-    "Orbiter/Probe": "orbiter_probe",
-    "Mixed": "mixed",
-    "Space Telescope": "orbiter",   # closest match in training data
-    "Crewed": "lander",             # closest match in training data
-}
-
-def _resolve_mission(raw: str) -> str:
-    """Case-insensitive fuzzy match against known mission architectures."""
-    txt = raw.strip()
-    if not txt:
-        return "Orbiter"
-    for m in MISSION_TYPES:
-        if m.lower() == txt.lower():
-            return m
-    for m in MISSION_TYPES:
-        if m.lower().startswith(txt.lower()):
-            return m
-    for m in MISSION_TYPES:
-        if txt.lower() in m.lower():
-            return m
-    return txt
-
-# Fallback planet data for unknown bodies
-_FALLBACK_PLANET = {
-    "dist": 1.5, "mass": 0.5, "radius": 3000, "gravity": 4.0,
-    "temp": -60, "press": 0.01, "mag": 0, "gas": 0, "solid": 1,
-    "desc": "Custom / unknown body — using estimated parameters."
-}
-
 # ── Sidebar Inputs ────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("### 🪐 Mission Configuration")
-
+    
     target_planet = st.selectbox("Target Celestial Body", list(PLANETS_DB.keys()), index=4)
-    planet_info = PLANETS_DB.get(target_planet, _FALLBACK_PLANET)
-
-    mission_type = st.selectbox("Mission Architecture", MISSION_TYPES, index=0)
-
+    planet_info = PLANETS_DB[target_planet]
+    
+    mission_type = st.selectbox("Mission Architecture", ["Orbiter", "Rover", "Lander", "Flyby"], index=0)
+    
     st.markdown("---")
     st.markdown("### ⚙️ Spacecraft Specs")
-
+    
     cruise_days = st.number_input("Cruise Duration (days)", min_value=1.0, max_value=10000.0, value=250.0, step=10.0)
     spacecraft_mass = st.number_input("Total Mass (kg)", min_value=10.0, max_value=50000.0, value=2200.0, step=100.0)
     science_payload = st.number_input("Science Payload (kg)", min_value=1.0, max_value=5000.0, value=120.0, step=10.0)
     hist_success = st.selectbox("Historical Precedent", [1, 0], format_func=lambda x: "Yes (Target Reached Before)" if x == 1 else "No (New Frontier)")
-
+    
     st.markdown("---")
     st.markdown("### 🚀 Engine & Thruster Specs")
     isp = st.slider("Specific Impulse $I_{sp}$ (seconds)", min_value=200, max_value=4500, value=320, step=10, help="Chemical ~320s, Solar Electric ~3000s")
@@ -295,33 +222,32 @@ escape_velocity = math.sqrt(2 * (6.6743e-11) * (mass_1e24 * 1e24) / (radius_km *
 temp_c = planet_info["temp"]
 press_bar = planet_info["press"]
 
-# Resolve mission type to CSV format for model prediction
-mission_csv = MISSION_TO_CSV.get(mission_type, mission_type.lower().replace("/", "_").replace(" ", "_"))
-_mt_lower = mission_csv.lower()
-
 # ==========================================================================
 # DIVISION 1: MISSION FEASIBILITY AI SCORE
 # ==========================================================================
 st.markdown("<div class='section-title'>📊 1. Mission Feasibility AI Score</div>", unsafe_allow_html=True)
 
 input_df = pd.DataFrame([{
-    "target_canonical": target_planet,
-    "mission_type_normalized": mission_csv,
-    "cruise_duration_days": cruise_days,
+    "target": target_planet,
+    "mission_type": mission_type,
+    "cruise_days": cruise_days,
     "spacecraft_mass_kg": spacecraft_mass,
-    "science_payload_mass_kg": science_payload,
-    "historical_success_label": hist_success,
-    "target_heliocentric_AU": dist_au,
-    "target_mass_1e24_kg": mass_1e24,
-    "target_radius_km": radius_km,
-    "target_gravity_m_s2": gravity_m_s2,
-    "target_escape_velocity_km_s": escape_velocity,
-    "blackbody_equilibrium_temperature_K": temp_c + 273.15,
-    "target_has_conventional_solid_surface": planet_info["solid"],
-    "is_orbiter": 1 if "orbiter" in _mt_lower else 0,
-    "is_rover": 1 if "rover" in _mt_lower else 0,
-    "is_lander": 1 if "lander" in _mt_lower else 0,
-    "is_flyby": 1 if "flyby" in _mt_lower else 0,
+    "science_payload_kg": science_payload,
+    "historical_success": hist_success,
+    "distance_AU": dist_au,
+    "mass_1e24_kg": mass_1e24,
+    "radius_km": radius_km,
+    "gravity_m_s2": gravity_m_s2,
+    "escape_velocity_km_s": escape_velocity,
+    "temperature_C": temp_c,
+    "pressure_bar": press_bar,
+    "global_magnetic_field": planet_info["mag"],
+    "gas_giant": planet_info["gas"],
+    "solid_surface": planet_info["solid"],
+    "is_orbiter": 1 if mission_type == "Orbiter" else 0,
+    "is_rover": 1 if mission_type == "Rover" else 0,
+    "is_lander": 1 if mission_type == "Lander" else 0,
+    "is_flyby": 1 if mission_type == "Flyby" else 0,
 }])
 
 pred_val = model.predict(input_df)[0]
@@ -360,7 +286,7 @@ with col_score_r:
     st.markdown("#### 🔍 AI Feasibility Score Breakdown & Driving Factors")
     
     reasons = []
-    if press_bar > 10.0 and ("lander" in _mt_lower or "rover" in _mt_lower):
+    if press_bar > 10.0 and mission_type in ["Lander", "Rover"]:
         reasons.append(f"⚠️ **Atmospheric Overpressure:** Extreme surface pressure ({press_bar} bar) imposes structural crush hazard for surface landing.")
     elif press_bar > 0.001:
         reasons.append("💨 **Aero-braking Capability:** Atmosphere presence enables aerodynamic deceleration, reducing propellant needed for orbital entry.")
@@ -378,7 +304,7 @@ with col_score_r:
     if target_planet in ["Mars", "Moon"]:
         reasons.append("✅ **Proven Flight Heritage:** Target has high historical success rates (TRL 8-9) with extensive telemetry.")
 
-    if "flyby" in _mt_lower:
+    if mission_type == "Flyby":
         reasons.append("🚀 **Simplified Trajectory:** Flyby avoids entry, descent, landing (EDL), and orbit insertion burn hazards.")
 
     for r in reasons:
@@ -406,7 +332,7 @@ else:
 if dist_au > 4.0:
     prop = "Dual-mode Radioisotope Electric Propulsion (REP) / Monopropellant hydrazine for RCS."
     prop_why = "Solar flux is insufficient beyond 4 AU; electric propulsion delivers high specific impulse ($I_{sp}$) for deep space cruise."
-elif ("lander" in _mt_lower or "rover" in _mt_lower) and planet_info["press"] > 0.001:
+elif mission_type in ["Lander", "Rover"] and planet_info["press"] > 0.001:
     prop = "Hypergolic Bipropellant (MMH/NTO) + Supersonic Retro-propulsion / Aero-braking heat shield."
     prop_why = "Provides instant restart capability and high thrust-to-weight ratio during entry, descent, and landing (EDL)."
 else:

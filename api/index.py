@@ -33,15 +33,12 @@ def get_model():
             
     return model, meta
 
-# Planetary database — includes all targets from the CSV training dataset + Uranus/Neptune
 PLANETS_DB = {
     "Mercury": {"dist": 0.387, "mass": 0.330, "radius": 2439, "gravity": 3.70, "temp": 167, "press": 1e-11, "mag": 0, "gas": 0, "solid": 1, "desc": "Extreme thermal fluctuations, high solar radiation, thin exosphere."},
     "Venus": {"dist": 0.723, "mass": 4.867, "radius": 6051, "gravity": 8.87, "temp": 464, "press": 92.0, "mag": 0, "gas": 0, "solid": 1, "desc": "Dense carbon dioxide atmosphere, supercritical pressures, corrosive sulfuric acid clouds."},
     "Earth": {"dist": 1.000, "mass": 5.972, "radius": 6371, "gravity": 9.81, "temp": 15, "press": 1.013, "mag": 1, "gas": 0, "solid": 1, "desc": "Habitable nitrogen-oxygen atmosphere, protective magnetosphere, liquid surface oceans."},
     "Moon": {"dist": 1.000, "mass": 0.073, "radius": 1737, "gravity": 1.62, "temp": -20, "press": 3e-15, "mag": 0, "gas": 0, "solid": 1, "desc": "Airless vacuum, high micrometeoroid risk, sharp abrasive lunar regolith."},
     "Mars": {"dist": 1.524, "mass": 0.642, "radius": 3389, "gravity": 3.71, "temp": -65, "press": 0.0069, "mag": 0, "gas": 0, "solid": 1, "desc": "Thin CO2 atmosphere, global dust storms, polar ice caps, legacy surface water channels."},
-    "Phobos": {"dist": 1.524, "mass": 1.07e-5, "radius": 11, "gravity": 0.0057, "temp": -40, "press": 0.0, "mag": 0, "gas": 0, "solid": 1, "desc": "Irregular Martian moon, ultra-low gravity, grooved surface, likely captured asteroid."},
-    "Ceres": {"dist": 2.768, "mass": 0.000938, "radius": 470, "gravity": 0.27, "temp": -106, "press": 0.0, "mag": 0, "gas": 0, "solid": 1, "desc": "Largest asteroid belt object, dwarf planet, water-ice subsurface, bright salt deposits."},
     "Jupiter": {"dist": 5.203, "mass": 1898.0, "radius": 69911, "gravity": 24.79, "temp": -110, "press": 100.0, "mag": 1, "gas": 1, "solid": 0, "desc": "Massive gas giant, extreme radiation belts, violent storm systems (Great Red Spot)."},
     "Europa": {"dist": 5.203, "mass": 0.048, "radius": 1560, "gravity": 1.31, "temp": -160, "press": 1e-12, "mag": 0, "gas": 0, "solid": 1, "desc": "Subsurface liquid ocean beneath an ice crust, intense Jovian magnetospheric radiation."},
     "Saturn": {"dist": 9.537, "mass": 568.3, "radius": 58232, "gravity": 10.44, "temp": -140, "press": 100.0, "mag": 1, "gas": 1, "solid": 0, "desc": "Ringed gas giant, low bulk density, extensive satellite system."},
@@ -285,35 +282,22 @@ HTML_TEMPLATE = """
         }
 
         const planetNames = Object.keys(planetsDB);
-        const PLANET_ICONS = { Mercury:'&#9791;', Venus:'&#9792;', Earth:'&#127757;', Moon:'&#127765;', Mars:'&#128308;', Phobos:'&#9673;', Ceres:'&#9672;', Jupiter:'&#129504;', Europa:'&#128309;', Saturn:'&#128344;', Titan:'&#128993;', Uranus:'&#128309;', Neptune:'&#128309;', Pluto:'&#9899;' };
+        const PLANET_ICONS = { Mercury:'&#9791;', Venus:'&#9792;', Earth:'&#127757;', Moon:'&#127765;', Mars:'&#128308;', Jupiter:'&#129504;', Europa:'&#128309;', Saturn:'&#128344;', Titan:'&#128993;', Uranus:'&#128309;', Neptune:'&#128309;', Pluto:'&#9899;' };
         makeAutocomplete({ inputId:'target', dropId:'planetDrop', items:planetNames, iconFn: p => PLANET_ICONS[p] || '&#127760;', badgeFn: p => planetsDB[p].dist + ' AU' });
 
-        const MISSION_TYPES = ['Orbiter','Rover','Lander','Flyby','Sample Return','Atmospheric Probe','Impactor','Lander + Penetrators','Lander/Rover','Orbiter/Flyby','Orbiter/Lander','Orbiter/Probe','Mixed','Space Telescope','Crewed'];
-        const MISSION_ICONS = { Orbiter:'&#128752;', Rover:'&#128663;', Lander:'&#128748;', Flyby:'&#128168;', 'Sample Return':'&#129532;', 'Atmospheric Probe':'&#127744;', Impactor:'&#128165;', 'Lander + Penetrators':'&#128204;', 'Lander/Rover':'&#128663;', 'Orbiter/Flyby':'&#128752;', 'Orbiter/Lander':'&#128752;', 'Orbiter/Probe':'&#128752;', Mixed:'&#128256;', 'Space Telescope':'&#128301;', Crewed:'&#128104;&#8205;&#128640;' };
-        const MISSION_DESC  = { Orbiter:'Remote sensing', Rover:'Surface mobility', Lander:'Fixed surface', Flyby:'Gravity assist', 'Sample Return':'Return material to Earth', 'Atmospheric Probe':'Atmosphere descent', Impactor:'Kinetic impact study', 'Lander + Penetrators':'Surface+subsurface', 'Lander/Rover':'Surface+mobility', 'Orbiter/Flyby':'Orbit+gravity assist', 'Orbiter/Lander':'Orbit+surface', 'Orbiter/Probe':'Orbit+descent probe', Mixed:'Multi-architecture', 'Space Telescope':'Deep space observation', Crewed:'Human spaceflight' };
+        const MISSION_TYPES = ['Orbiter','Rover','Lander','Flyby'];
+        const MISSION_ICONS = { Orbiter:'&#128752;', Rover:'&#128663;', Lander:'&#128748;', Flyby:'&#128168;' };
+        const MISSION_DESC  = { Orbiter:'Remote sensing', Rover:'Surface mobility', Lander:'Fixed surface', Flyby:'Gravity assist' };
         makeAutocomplete({ inputId:'mission_type', dropId:'missionDrop', items:MISSION_TYPES, iconFn: m => MISSION_ICONS[m] || '&#128752;', badgeFn: m => MISSION_DESC[m] || '' });
 
         function normalizeMissionType(raw) {
-            if (!raw) return 'orbiter';
+            if (!raw) return 'Orbiter';
             const r = raw.trim().toLowerCase();
-            const MAP = {
-                'orbiter': 'orbiter', 'rover': 'rover', 'lander': 'lander', 'flyby': 'flyby',
-                'sample return': 'sample_return', 'atmospheric probe': 'atmospheric_probe',
-                'impactor': 'impactor', 'lander + penetrators': 'lander + penetrators',
-                'lander/rover': 'lander_rover', 'orbiter/flyby': 'orbiter_flyby',
-                'orbiter/lander': 'orbiter_lander', 'orbiter/probe': 'orbiter_probe',
-                'mixed': 'mixed', 'space telescope': 'orbiter', 'crewed': 'lander'
-            };
-            if (MAP[r]) return MAP[r];
-            if (r.startsWith('orb')) return 'orbiter';
-            if (r.startsWith('rov')) return 'rover';
-            if (r.startsWith('lan')) return 'lander';
-            if (r.startsWith('fly') || r === 'fl') return 'flyby';
-            if (r.startsWith('sam')) return 'sample_return';
-            if (r.startsWith('atm')) return 'atmospheric_probe';
-            if (r.startsWith('imp')) return 'impactor';
-            if (r.startsWith('mix')) return 'mixed';
-            return raw.trim().toLowerCase().replace(/\//g, '_').replace(/ /g, '_');
+            if (r.startsWith('orb')) return 'Orbiter';
+            if (r.startsWith('rov')) return 'Rover';
+            if (r.startsWith('lan')) return 'Lander';
+            if (r.startsWith('fly') || r === 'fl') return 'Flyby';
+            return raw.trim().charAt(0).toUpperCase() + raw.trim().slice(1);
         }
 
 
@@ -503,23 +487,26 @@ def predict():
         model_obj, _ = get_model()
         
         input_dict = {
-            "target_canonical": data.get("target"),
-            "mission_type_normalized": data.get("mission_type"),
-            "cruise_duration_days": float(data.get("cruise_days", 0)),
+            "target": data.get("target"),
+            "mission_type": data.get("mission_type"),
+            "cruise_days": float(data.get("cruise_days", 0)),
             "spacecraft_mass_kg": float(data.get("spacecraft_mass_kg", 0)),
-            "science_payload_mass_kg": float(data.get("science_payload_kg", 0)),
-            "historical_success_label": int(data.get("historical_success", 1)),
-            "target_heliocentric_AU": float(data.get("distance_AU", 1.0)),
-            "target_mass_1e24_kg": float(data.get("mass_1e24_kg", 0.1)),
-            "target_radius_km": float(data.get("radius_km", 1000)),
-            "target_gravity_m_s2": float(data.get("gravity_m_s2", 3.7)),
-            "target_escape_velocity_km_s": float(data.get("escape_velocity_km_s", 5.0)),
-            "blackbody_equilibrium_temperature_K": float(data.get("temperature_C", 20)) + 273.15,
-            "target_has_conventional_solid_surface": int(data.get("solid_surface", 1)),
-            "is_orbiter": 1 if "orbiter" in str(data.get("mission_type", "")).lower() else 0,
-            "is_rover": 1 if "rover" in str(data.get("mission_type", "")).lower() else 0,
-            "is_lander": 1 if "lander" in str(data.get("mission_type", "")).lower() else 0,
-            "is_flyby": 1 if "flyby" in str(data.get("mission_type", "")).lower() else 0,
+            "science_payload_kg": float(data.get("science_payload_kg", 0)),
+            "historical_success": int(data.get("historical_success", 1)),
+            "distance_AU": float(data.get("distance_AU", 1.0)),
+            "mass_1e24_kg": float(data.get("mass_1e24_kg", 0.1)),
+            "radius_km": float(data.get("radius_km", 1000)),
+            "gravity_m_s2": float(data.get("gravity_m_s2", 3.7)),
+            "escape_velocity_km_s": float(data.get("escape_velocity_km_s", 5.0)),
+            "temperature_C": float(data.get("temperature_C", 20)),
+            "pressure_bar": float(data.get("pressure_bar", 1.0)),
+            "global_magnetic_field": int(data.get("global_magnetic_field", 0)),
+            "gas_giant": int(data.get("gas_giant", 0)),
+            "solid_surface": int(data.get("solid_surface", 1)),
+            "is_orbiter": 1 if data.get("mission_type") == "Orbiter" else 0,
+            "is_rover": 1 if data.get("mission_type") == "Rover" else 0,
+            "is_lander": 1 if data.get("mission_type") == "Lander" else 0,
+            "is_flyby": 1 if data.get("mission_type") == "Flyby" else 0,
         }
         
         input_df = pd.DataFrame([input_dict])
