@@ -151,7 +151,7 @@ def predict_mission_feasibility(
         return {"error": "Science payload must be smaller than total spacecraft mass."}
 
     p = PLANETS_DB[body]
-    # Same feature set and order as api/index.py -> /api/predict
+    # Keep feature names and order aligned with the model prediction form.
     features = {
         "target": body,
         "mission_type": mission,

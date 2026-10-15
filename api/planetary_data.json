@@ -1,0 +1,893 @@
+{
+  "bodies": {
+    "Mercury": {
+      "id": "mercury",
+      "name": "Mercury",
+      "type": "Terrestrial Planet",
+      "parent_body": "Sun",
+      "icon": "☿",
+      "color": "#94a3b8",
+      "physical": {
+        "radius_km": 2439.7,
+        "mass_1e24_kg": 0.33011,
+        "density_g_cm3": 5.427,
+        "surface_gravity_m_s2": 3.70,
+        "escape_velocity_km_s": 4.25,
+        "rotation_period_hours": 1407.6,
+        "orbital_period_days": 87.97,
+        "axial_tilt_deg": 0.034,
+        "distance_from_sun_au": 0.387,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1e-11,
+        "pressure_display": "< 10⁻¹¹ bar (Trace Exosphere)",
+        "composition": [
+          {"gas": "Oxygen (O₂)", "percentage": 42.0},
+          {"gas": "Sodium (Na)", "percentage": 29.0},
+          {"gas": "Hydrogen (H₂)", "percentage": 22.0},
+          {"gas": "Helium (He)", "percentage": 6.0},
+          {"gas": "Potassium (K)", "percentage": 1.0}
+        ],
+        "magnetosphere": "Weak global dipole (~1% Earth)",
+        "greenhouse_effect": "None (exosphere too sparse to trap heat)",
+        "weather_notes": "No weather or winds; micrometeorite bombardment directly erodes surface."
+      },
+      "environmental": {
+        "mean_temp_c": 167,
+        "min_temp_c": -180,
+        "max_temp_c": 430,
+        "radiation_level": "Extremely High (Unshielded solar wind & coronal mass ejections)",
+        "radiation_tier": "Critical",
+        "surface_type": "Silicate rock, heavily cratered regolith",
+        "water_or_ice": "Water ice trapped in permanently shadowed polar craters",
+        "geological_activity": "Inactive; ancient contraction thrust scarps",
+        "habitability_notes": "Completely inhospitable to unshielded life; polar craters offer potential ice for ISRU."
+      },
+      "sources": "NASA Planetary Fact Sheet - Mercury (2024)"
+    },
+    "Venus": {
+      "id": "venus",
+      "name": "Venus",
+      "type": "Terrestrial Planet",
+      "parent_body": "Sun",
+      "icon": "♀",
+      "color": "#eab308",
+      "physical": {
+        "radius_km": 6051.8,
+        "mass_1e24_kg": 4.8675,
+        "density_g_cm3": 5.243,
+        "surface_gravity_m_s2": 8.87,
+        "escape_velocity_km_s": 10.36,
+        "rotation_period_hours": -5832.5,
+        "orbital_period_days": 224.70,
+        "axial_tilt_deg": 177.36,
+        "distance_from_sun_au": 0.723,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 92.0,
+        "pressure_display": "92.0 bar (Crushing, ~900m ocean depth)",
+        "composition": [
+          {"gas": "Carbon Dioxide (CO₂)", "percentage": 96.5},
+          {"gas": "Nitrogen (N₂)", "percentage": 3.5},
+          {"gas": "Sulfur Dioxide (SO₂)", "percentage": 0.015},
+          {"gas": "Argon (Ar)", "percentage": 0.007}
+        ],
+        "magnetosphere": "Induced ionospheric magnetosphere only (no intrinsic dipole)",
+        "greenhouse_effect": "Extreme runaway greenhouse (+450°C warming effect)",
+        "weather_notes": "Super-rotating hurricane-force cloud winds (360 km/h) with sulfuric acid rain evaporating before ground."
+      },
+      "environmental": {
+        "mean_temp_c": 464,
+        "min_temp_c": 438,
+        "max_temp_c": 482,
+        "radiation_level": "Low at surface due to thick atmosphere; High in upper atmosphere",
+        "radiation_tier": "Low (Surface)",
+        "surface_type": "Basaltic volcanic plains, deformed tessera terrains",
+        "water_or_ice": "No liquid water; atmospheric desiccated vapor (<0.002%)",
+        "geological_activity": "Active volcanism evidenced by episodic SO₂ variations & young lava flows",
+        "habitability_notes": "Surface is hellish; cloud layer at 50-65 km altitude offers Earth-like pressure (1 bar) & mild temps (20-60°C)."
+      },
+      "sources": "NASA Venus Express / Magellan Mission Archives"
+    },
+    "Earth": {
+      "id": "earth",
+      "name": "Earth",
+      "type": "Terrestrial Planet",
+      "parent_body": "Sun",
+      "icon": "🌍",
+      "color": "#38bdf8",
+      "physical": {
+        "radius_km": 6371.0,
+        "mass_1e24_kg": 5.9722,
+        "density_g_cm3": 5.514,
+        "surface_gravity_m_s2": 9.807,
+        "escape_velocity_km_s": 11.19,
+        "rotation_period_hours": 23.934,
+        "orbital_period_days": 365.256,
+        "axial_tilt_deg": 23.44,
+        "distance_from_sun_au": 1.000,
+        "number_of_moons": 1
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1.013,
+        "pressure_display": "1.013 bar (Standard 1 atm)",
+        "composition": [
+          {"gas": "Nitrogen (N₂)", "percentage": 78.08},
+          {"gas": "Oxygen (O₂)", "percentage": 20.95},
+          {"gas": "Argon (Ar)", "percentage": 0.93},
+          {"gas": "Carbon Dioxide (CO₂)", "percentage": 0.04}
+        ],
+        "magnetosphere": "Strong intrinsic magnetic dipole (~31 µT at equator)",
+        "greenhouse_effect": "Moderate natural greenhouse (+33°C warming, stabilizing liquid oceans)",
+        "weather_notes": "Dynamic hydrological cycle, cyclonic storm systems, jet streams, precipitation."
+      },
+      "environmental": {
+        "mean_temp_c": 15,
+        "min_temp_c": -89.2,
+        "max_temp_c": 56.7,
+        "radiation_level": "Minimal; surface shielded by thick atmosphere & magnetosphere (0.007 mSv/day)",
+        "radiation_tier": "Safe",
+        "surface_type": "71% liquid water oceans, 29% continental granite & basalt",
+        "water_or_ice": "Abundant liquid oceans, polar ice sheets, atmospheric vapor",
+        "geological_activity": "Highly active plate tectonics, volcanism, earthquakes",
+        "habitability_notes": "Optimal baseline for carbon-based life; self-sustaining biosphere."
+      },
+      "sources": "NASA Planetary Fact Sheet - Earth (2024)"
+    },
+    "Moon": {
+      "id": "moon",
+      "name": "Moon",
+      "type": "Major Moon",
+      "parent_body": "Earth",
+      "icon": "🌕",
+      "color": "#cbd5e1",
+      "physical": {
+        "radius_km": 1737.4,
+        "mass_1e24_kg": 0.07346,
+        "density_g_cm3": 3.344,
+        "surface_gravity_m_s2": 1.62,
+        "escape_velocity_km_s": 2.38,
+        "rotation_period_hours": 655.72,
+        "orbital_period_days": 27.32,
+        "axial_tilt_deg": 1.54,
+        "distance_from_sun_au": 1.000,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 3e-15,
+        "pressure_display": "3 × 10⁻¹⁵ bar (Hard Vacuum)",
+        "composition": [
+          {"gas": "Helium (He)", "percentage": 40.0},
+          {"gas": "Neon (Ne)", "percentage": 30.0},
+          {"gas": "Hydrogen (H₂)", "percentage": 20.0},
+          {"gas": "Argon (Ar)", "percentage": 10.0}
+        ],
+        "magnetosphere": "None; localized remnant crustal magnetic anomalies only",
+        "greenhouse_effect": "None (complete vacuum)",
+        "weather_notes": "Vacuum; micrometeorite bombardment, solar wind sputtering, electrostatic dust levitation."
+      },
+      "environmental": {
+        "mean_temp_c": -20,
+        "min_temp_c": -246,
+        "max_temp_c": 121,
+        "radiation_level": "High (Cosmic rays & solar particle events: ~1.36 mSv/day, 200x Earth)",
+        "radiation_tier": "Severe",
+        "surface_type": "Anorthositic highlands and basaltic maria covered in abrasive regolith",
+        "water_or_ice": "Water ice detected in permanently shadowed craters at lunar poles (e.g., Shackleton)",
+        "geological_activity": "Extremely weak deep moonquakes driven by Earth tidal stresses",
+        "habitability_notes": "Prime target for Artemis base camps; polar ice deposits enable ISRU hydrogen/oxygen propellant generation."
+      },
+      "sources": "NASA LRO & Apollo Scientific Results"
+    },
+    "Mars": {
+      "id": "mars",
+      "name": "Mars",
+      "type": "Terrestrial Planet",
+      "parent_body": "Sun",
+      "icon": "♂",
+      "color": "#ef4444",
+      "physical": {
+        "radius_km": 3389.5,
+        "mass_1e24_kg": 0.64171,
+        "density_g_cm3": 3.933,
+        "surface_gravity_m_s2": 3.72,
+        "escape_velocity_km_s": 5.03,
+        "rotation_period_hours": 24.623,
+        "orbital_period_days": 686.98,
+        "axial_tilt_deg": 25.19,
+        "distance_from_sun_au": 1.524,
+        "number_of_moons": 2
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 0.00636,
+        "pressure_display": "0.0064 bar (6.4 mbar, <1% Earth)",
+        "composition": [
+          {"gas": "Carbon Dioxide (CO₂)", "percentage": 95.32},
+          {"gas": "Nitrogen (N₂)", "percentage": 2.60},
+          {"gas": "Argon (Ar)", "percentage": 1.90},
+          {"gas": "Oxygen (O₂)", "percentage": 0.13},
+          {"gas": "Carbon Monoxide (CO)", "percentage": 0.05}
+        ],
+        "magnetosphere": "Remnant crustal magnetic fields; no global dipole",
+        "greenhouse_effect": "Very weak (+5°C greenhouse warming)",
+        "weather_notes": "Planet-encircling dust storms, dust devils, cold CO₂ frost, high atmospheric winds."
+      },
+      "environmental": {
+        "mean_temp_c": -65,
+        "min_temp_c": -140,
+        "max_temp_c": 20,
+        "radiation_level": "High (~0.67 mSv/day, ~100x Earth background without shield)",
+        "radiation_tier": "High",
+        "surface_type": "Iron-oxide rich silicate basalt regolith, ancient riverbeds, massive volcanic shields",
+        "water_or_ice": "Vast water ice in polar ice caps & sub-surface permafrost; seasonal brine trickles",
+        "geological_activity": "Low; occasional marsquakes detected by NASA InSight",
+        "habitability_notes": "Most promising terrestrial candidate for human exploration; high ISRU potential via Sabatier fuel synthesis."
+      },
+      "sources": "NASA Mars Reconnaissance Orbiter & Curiosity/Perseverance Telemetry"
+    },
+    "Phobos": {
+      "id": "phobos",
+      "name": "Phobos",
+      "type": "Moon",
+      "parent_body": "Mars",
+      "icon": "🥔",
+      "color": "#a8a29e",
+      "physical": {
+        "radius_km": 11.27,
+        "mass_1e24_kg": 0.00000001066,
+        "density_g_cm3": 1.876,
+        "surface_gravity_m_s2": 0.0057,
+        "escape_velocity_km_s": 0.011,
+        "rotation_period_hours": 7.66,
+        "orbital_period_days": 0.319,
+        "axial_tilt_deg": 0.0,
+        "distance_from_sun_au": 1.524,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 0.0,
+        "pressure_display": "None (Pure Vacuum)",
+        "composition": [
+          {"gas": "Vacuum", "percentage": 100.0}
+        ],
+        "magnetosphere": "None",
+        "greenhouse_effect": "None",
+        "weather_notes": "Direct solar exposure and Mars thermal re-radiation."
+      },
+      "environmental": {
+        "mean_temp_c": -40,
+        "min_temp_c": -112,
+        "max_temp_c": -4,
+        "radiation_level": "High (Unmitigated cosmic and solar radiation)",
+        "radiation_tier": "Severe",
+        "surface_type": "Carbonaceous chondrite rubble pile covered in regolith",
+        "water_or_ice": "Possible subsurface phyllosilicates or carbonaceous ice pockets",
+        "geological_activity": "Inactive; decaying orbit experiencing tidal disruption in ~40 Myr",
+        "habitability_notes": "Ideal low delta-v staging base and communications relay for Mars exploration."
+      },
+      "sources": "ESA Mars Express & NASA MAVEN Science Team"
+    },
+    "Ceres": {
+      "id": "ceres",
+      "name": "Ceres",
+      "type": "Dwarf Planet",
+      "parent_body": "Sun",
+      "icon": "⚳",
+      "color": "#78716c",
+      "physical": {
+        "radius_km": 473.0,
+        "mass_1e24_kg": 0.000938,
+        "density_g_cm3": 2.161,
+        "surface_gravity_m_s2": 0.28,
+        "escape_velocity_km_s": 0.51,
+        "rotation_period_hours": 9.074,
+        "orbital_period_days": 1683.15,
+        "axial_tilt_deg": 4.0,
+        "distance_from_sun_au": 2.767,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1e-12,
+        "pressure_display": "Transient water vapor exosphere",
+        "composition": [
+          {"gas": "Water Vapor (H₂O)", "percentage": 98.0},
+          {"gas": "Other Trace", "percentage": 2.0}
+        ],
+        "magnetosphere": "None",
+        "greenhouse_effect": "None",
+        "weather_notes": "Sublimation transient plumes triggered by solar perihelion."
+      },
+      "environmental": {
+        "mean_temp_c": -106,
+        "min_temp_c": -143,
+        "max_temp_c": -38,
+        "radiation_level": "High interplanetary galactic cosmic ray exposure",
+        "radiation_tier": "High",
+        "surface_type": "Hydrated clays, sodium carbonate salts (Occator Crater faculae)",
+        "water_or_ice": "Enormous water ice mantle (up to 25% of total mass is water/ice)",
+        "geological_activity": "Recent cryovolcanism (Ahuna Mons salt-mud dome)",
+        "habitability_notes": "Water-rich oasis of the Asteroid Belt; primary candidate for in-space water harvesting."
+      },
+      "sources": "NASA Dawn Mission Results (JPL/Dawn Science Team)"
+    },
+    "Jupiter": {
+      "id": "jupiter",
+      "name": "Jupiter",
+      "type": "Gas Giant",
+      "parent_body": "Sun",
+      "icon": "♃",
+      "color": "#f97316",
+      "physical": {
+        "radius_km": 69911.0,
+        "mass_1e24_kg": 1898.19,
+        "density_g_cm3": 1.326,
+        "surface_gravity_m_s2": 24.79,
+        "escape_velocity_km_s": 59.50,
+        "rotation_period_hours": 9.925,
+        "orbital_period_days": 4332.59,
+        "axial_tilt_deg": 3.13,
+        "distance_from_sun_au": 5.203,
+        "number_of_moons": 95
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 100.0,
+        "pressure_display": "100+ bar (Continuous fluid transition, no solid surface)",
+        "composition": [
+          {"gas": "Hydrogen (H₂)", "percentage": 89.8},
+          {"gas": "Helium (He)", "percentage": 10.2},
+          {"gas": "Methane (CH₄)", "percentage": 0.3},
+          {"gas": "Ammonia (NH₃)", "percentage": 0.026}
+        ],
+        "magnetosphere": "Vast, strongest in Solar System (20,000x Earth magnetic moment)",
+        "greenhouse_effect": "Significant internal heat generation (radiates 1.6x energy absorbed)",
+        "weather_notes": "Anticyclonic storms (Great Red Spot), Zonal jet streams up to 540 km/h, ammonia lightning."
+      },
+      "environmental": {
+        "mean_temp_c": -110,
+        "min_temp_c": -160,
+        "max_temp_c": 20,
+        "radiation_level": "Extreme lethal radiation belts trapped in Jovian magnetosphere (up to 500 Sv/day in core belts)",
+        "radiation_tier": "Critical Lethal",
+        "surface_type": "No solid surface; supercritical hydrogen fluid ocean grading into metallic hydrogen",
+        "water_or_ice": "Atmospheric water vapor detected by Juno probe (~0.25% deep atmosphere)",
+        "geological_activity": "Atmospheric vortex dynamics and metallic hydrogen dynamo",
+        "habitability_notes": "Uninhabitable for landers; atmosphere probes viable with massive titanium heat shields."
+      },
+      "sources": "NASA Juno Mission Science & Galileo Atmospheric Probe"
+    },
+    "Io": {
+      "id": "io",
+      "name": "Io",
+      "type": "Major Moon",
+      "parent_body": "Jupiter",
+      "icon": "🌋",
+      "color": "#facc15",
+      "physical": {
+        "radius_km": 1821.6,
+        "mass_1e24_kg": 0.08932,
+        "density_g_cm3": 3.528,
+        "surface_gravity_m_s2": 1.796,
+        "escape_velocity_km_s": 2.56,
+        "rotation_period_hours": 42.46,
+        "orbital_period_days": 1.769,
+        "axial_tilt_deg": 0.0,
+        "distance_from_sun_au": 5.203,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1e-9,
+        "pressure_display": "10⁻⁹ bar (Sulfur dioxide exosphere)",
+        "composition": [
+          {"gas": "Sulfur Dioxide (SO₂)", "percentage": 90.0},
+          {"gas": "Sulfur Monoxide (SO)", "percentage": 5.0},
+          {"gas": "Sodium Chloride (NaCl)", "percentage": 3.0},
+          {"gas": "Atomic Oxygen/Sulfur", "percentage": 2.0}
+        ],
+        "magnetosphere": "None; generates an intense electrical flux tube coupling to Jupiter",
+        "greenhouse_effect": "Negligible",
+        "weather_notes": "Volcanic SO₂ frost plumes erupting up to 500 km above surface; collapses in Jupiter shadow."
+      },
+      "environmental": {
+        "mean_temp_c": -143,
+        "min_temp_c": -184,
+        "max_temp_c": 1300,
+        "radiation_level": "Deadly Jovian radiation belt exposure (~36 Sv/day; human lethal dose in minutes)",
+        "radiation_tier": "Critical Lethal",
+        "surface_type": "Ultramafic silicate lava lakes, sulfur frost, and active calderas",
+        "water_or_ice": "Extremely desiccated; virtually zero water detected",
+        "geological_activity": "Most volcanically active body in the Solar System (tidal flexing by Jupiter & Europa)",
+        "habitability_notes": "Lethal radiation and extreme volcanism make surface survival nearly impossible."
+      },
+      "sources": "NASA Galileo, New Horizons & Juno Spacecraft Imagery"
+    },
+    "Europa": {
+      "id": "europa",
+      "name": "Europa",
+      "type": "Major Moon",
+      "parent_body": "Jupiter",
+      "icon": "❄️",
+      "color": "#38bdf8",
+      "physical": {
+        "radius_km": 1560.8,
+        "mass_1e24_kg": 0.0480,
+        "density_g_cm3": 3.013,
+        "surface_gravity_m_s2": 1.315,
+        "escape_velocity_km_s": 2.025,
+        "rotation_period_hours": 85.23,
+        "orbital_period_days": 3.551,
+        "axial_tilt_deg": 0.1,
+        "distance_from_sun_au": 5.203,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1e-12,
+        "pressure_display": "10⁻¹² bar (Trace Radiolytic Oxygen Exosphere)",
+        "composition": [
+          {"gas": "Molecular Oxygen (O₂)", "percentage": 99.0},
+          {"gas": "Water Vapor (H₂O)", "percentage": 1.0}
+        ],
+        "magnetosphere": "Induced magnetic field confirming a conductive subsurface liquid saltwater ocean",
+        "greenhouse_effect": "None",
+        "weather_notes": "Surface sputtering by Jovian magnetospheric ions; water vapor geysers venting into space."
+      },
+      "environmental": {
+        "mean_temp_c": -160,
+        "min_temp_c": -220,
+        "max_temp_c": -130,
+        "radiation_level": "Extremely High (~5.4 Sv/day on surface from trapped Jovian electrons)",
+        "radiation_tier": "Severe",
+        "surface_type": "Smooth water-ice shell (15-25 km thick) crisscrossed by reddish lineae fractures",
+        "water_or_ice": "Subsurface liquid saltwater ocean containing 2-3x all Earth's oceans combined",
+        "geological_activity": "Ice tectonics, chaos terrain, hydrothermal vents on deep ocean floor",
+        "habitability_notes": "Prime candidate for extraterrestrial life in warm, chemically rich sub-ice ocean."
+      },
+      "sources": "NASA Europa Clipper Mission Database & Galileo Telemetry"
+    },
+    "Ganymede": {
+      "id": "ganymede",
+      "name": "Ganymede",
+      "type": "Major Moon",
+      "parent_body": "Jupiter",
+      "icon": "🪐",
+      "color": "#94a3b8",
+      "physical": {
+        "radius_km": 2634.1,
+        "mass_1e24_kg": 0.14819,
+        "density_g_cm3": 1.942,
+        "surface_gravity_m_s2": 1.428,
+        "escape_velocity_km_s": 2.74,
+        "rotation_period_hours": 171.7,
+        "orbital_period_days": 7.155,
+        "axial_tilt_deg": 0.33,
+        "distance_from_sun_au": 5.203,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1e-11,
+        "pressure_display": "10⁻¹¹ bar (Thin Oxygen Exosphere)",
+        "composition": [
+          {"gas": "Molecular Oxygen (O₂)", "percentage": 95.0},
+          {"gas": "Atomic Oxygen (O)", "percentage": 4.0},
+          {"gas": "Hydrogen (H₂)", "percentage": 1.0}
+        ],
+        "magnetosphere": "Intrinsic magnetic dipole (only moon in Solar System with one; ~719 nT)",
+        "greenhouse_effect": "None",
+        "weather_notes": "Auroral belts around polar regions driven by magnetosphere interactions."
+      },
+      "environmental": {
+        "mean_temp_c": -163,
+        "min_temp_c": -203,
+        "max_temp_c": -121,
+        "radiation_level": "Moderate-High (~0.08 Sv/day; shielded partially by internal magnetic field)",
+        "radiation_tier": "High",
+        "surface_type": "Dark ancient cratered terrain and light younger grooved tectonic terrain",
+        "water_or_ice": "Sandwiched subsurface liquid ocean beneath ~100 km ice shell",
+        "geological_activity": "Ancient extensional tectonics; weak current convective ice motion",
+        "habitability_notes": "Largest moon in Solar System (bigger than Mercury); intrinsic magnetosphere shields explorers."
+      },
+      "sources": "ESA JUICE Science Planning & NASA Juno Flyby (2021)"
+    },
+    "Callisto": {
+      "id": "callisto",
+      "name": "Callisto",
+      "type": "Major Moon",
+      "parent_body": "Jupiter",
+      "icon": "🌑",
+      "color": "#64748b",
+      "physical": {
+        "radius_km": 2410.3,
+        "mass_1e24_kg": 0.10759,
+        "density_g_cm3": 1.834,
+        "surface_gravity_m_s2": 1.235,
+        "escape_velocity_km_s": 2.44,
+        "rotation_period_hours": 400.5,
+        "orbital_period_days": 16.689,
+        "axial_tilt_deg": 0.0,
+        "distance_from_sun_au": 5.203,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 7.5e-12,
+        "pressure_display": "7.5 × 10⁻¹² bar (CO₂ & Oxygen Exosphere)",
+        "composition": [
+          {"gas": "Carbon Dioxide (CO₂)", "percentage": 85.0},
+          {"gas": "Oxygen (O₂)", "percentage": 15.0}
+        ],
+        "magnetosphere": "Weak induced magnetic field indicative of salty subsurface liquid",
+        "greenhouse_effect": "None",
+        "weather_notes": "No weather; sublimating carbon dioxide frost."
+      },
+      "environmental": {
+        "mean_temp_c": -139,
+        "min_temp_c": -193,
+        "max_temp_c": -108,
+        "radiation_level": "Low (~0.01 mSv/day; sits outside Jupiter's main radiation belts)",
+        "radiation_tier": "Moderate",
+        "surface_type": "Most heavily cratered surface in Solar System; mixed ice and dark rock",
+        "water_or_ice": "Deep ocean possibly beneath ~150-200 km thick mixed ice/rock crust",
+        "geological_activity": "Geologically dead; no tidal heating resonance",
+        "habitability_notes": "Safest location in the Jovian system for human base staging due to negligible radiation."
+      },
+      "sources": "NASA Galileo Orbiter Data Archives"
+    },
+    "Saturn": {
+      "id": "saturn",
+      "name": "Saturn",
+      "type": "Gas Giant",
+      "parent_body": "Sun",
+      "icon": "♄",
+      "color": "#eab308",
+      "physical": {
+        "radius_km": 58232.0,
+        "mass_1e24_kg": 568.34,
+        "density_g_cm3": 0.687,
+        "surface_gravity_m_s2": 10.44,
+        "escape_velocity_km_s": 35.50,
+        "rotation_period_hours": 10.57,
+        "orbital_period_days": 10759.22,
+        "axial_tilt_deg": 26.73,
+        "distance_from_sun_au": 9.537,
+        "number_of_moons": 146
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 100.0,
+        "pressure_display": "100+ bar (Dense fluid transition, ringed giant)",
+        "composition": [
+          {"gas": "Hydrogen (H₂)", "percentage": 96.3},
+          {"gas": "Helium (He)", "percentage": 3.25},
+          {"gas": "Methane (CH₄)", "percentage": 0.45},
+          {"gas": "Ammonia (NH₃)", "percentage": 0.026}
+        ],
+        "magnetosphere": "Symmetric dipolar magnetosphere aligned almost perfectly with rotation axis (<0.01°)",
+        "greenhouse_effect": "High internal heat emission (generates 2.5x energy received from Sun)",
+        "weather_notes": "Supersonic equatorial jet winds (up to 1,800 km/h); giant Hexagon storm at north pole."
+      },
+      "environmental": {
+        "mean_temp_c": -140,
+        "min_temp_c": -190,
+        "max_temp_c": -30,
+        "radiation_level": "Moderate-High radiation belts absorption moderated by ring particles",
+        "radiation_tier": "High",
+        "surface_type": "No solid surface; density lower than water (0.687 g/cm³)",
+        "water_or_ice": "Spectacular ring system composed of 99% pure water ice particles",
+        "geological_activity": "Atmospheric convective storms and helium rain segregation",
+        "habitability_notes": "Inhabitable directly; rings and 146 moons offer limitless volatile resource potential."
+      },
+      "sources": "NASA/ESA Cassini-Huygens Mission Findings"
+    },
+    "Titan": {
+      "id": "titan",
+      "name": "Titan",
+      "type": "Major Moon",
+      "parent_body": "Saturn",
+      "icon": "🟠",
+      "color": "#f59e0b",
+      "physical": {
+        "radius_km": 2574.7,
+        "mass_1e24_kg": 0.13452,
+        "density_g_cm3": 1.880,
+        "surface_gravity_m_s2": 1.352,
+        "escape_velocity_km_s": 2.64,
+        "rotation_period_hours": 382.7,
+        "orbital_period_days": 15.945,
+        "axial_tilt_deg": 0.0,
+        "distance_from_sun_au": 9.580,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1.467,
+        "pressure_display": "1.47 bar (~1.5x Earth pressure)",
+        "composition": [
+          {"gas": "Nitrogen (N₂)", "percentage": 94.2},
+          {"gas": "Methane (CH₄)", "percentage": 5.65},
+          {"gas": "Hydrogen (H₂)", "percentage": 0.15}
+        ],
+        "magnetosphere": "None; shielded by Saturn's magnetosphere most of orbit",
+        "greenhouse_effect": "Anti-greenhouse organic haze cools surface, but methane provides mild greenhouse (+21K)",
+        "weather_notes": "Full hydrological cycle with liquid methane/ethane clouds, rainfall, rivers, and polar seas."
+      },
+      "environmental": {
+        "mean_temp_c": -179,
+        "min_temp_c": -182,
+        "max_temp_c": -175,
+        "radiation_level": "Extremely Low on surface (thick atmosphere absorbs GCRs and solar wind)",
+        "radiation_tier": "Safe",
+        "surface_type": "Solid water-ice bedrock coated in complex tholin organic dunes and liquid hydrocarbon lakes",
+        "water_or_ice": "Global liquid methane/ethane seas (Kraken Mare) and deep subsurface water-ammonia ocean",
+        "geological_activity": "Cryovolcanism, wind erosion, methane rain river valleys",
+        "habitability_notes": "Only moon with dense atmosphere; humans would only need warm thermal suit & oxygen mask (no pressure suit needed!)."
+      },
+      "sources": "Cassini Radar & ESA Huygens Probe In-situ Measurements"
+    },
+    "Enceladus": {
+      "id": "enceladus",
+      "name": "Enceladus",
+      "type": "Major Moon",
+      "parent_body": "Saturn",
+      "icon": "❄️",
+      "color": "#a5f3fc",
+      "physical": {
+        "radius_km": 252.1,
+        "mass_1e24_kg": 0.000108,
+        "density_g_cm3": 1.609,
+        "surface_gravity_m_s2": 0.113,
+        "escape_velocity_km_s": 0.239,
+        "rotation_period_hours": 32.88,
+        "orbital_period_days": 1.370,
+        "axial_tilt_deg": 0.0,
+        "distance_from_sun_au": 9.537,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1e-13,
+        "pressure_display": "Transient water plume exosphere",
+        "composition": [
+          {"gas": "Water Vapor (H₂O)", "percentage": 91.0},
+          {"gas": "Nitrogen (N₂)", "percentage": 4.0},
+          {"gas": "Carbon Dioxide (CO₂)", "percentage": 3.2},
+          {"gas": "Methane (CH₄)", "percentage": 1.7},
+          {"gas": "Molecular Hydrogen (H₂)", "percentage": 0.1}
+        ],
+        "magnetosphere": "Perturbs Saturn's magnetosphere via E-ring plasma feeding",
+        "greenhouse_effect": "None",
+        "weather_notes": "Continuous supersonic cryovolcanic plumes shooting vapor & ice 500 km into orbit."
+      },
+      "environmental": {
+        "mean_temp_c": -198,
+        "min_temp_c": -240,
+        "max_temp_c": -128,
+        "radiation_level": "Low-Moderate; shielded inside Saturn's protective magnetosphere bubble",
+        "radiation_tier": "Moderate",
+        "surface_type": "Fresh pristine water ice (highest albedo in Solar System: 0.99); tiger stripe thermal fractures",
+        "water_or_ice": "Global subsurface liquid water ocean with alkaline pH (9-11) & silica nanoparticles",
+        "geological_activity": "Active cryovolcanism powered by tidal dissipation from orbital resonance with Dione",
+        "habitability_notes": "Possesses all three keystones for life: liquid water, organic carbon molecules, and hydrothermal energy."
+      },
+      "sources": "NASA Cassini Cosmic Dust Analyzer & INMS Plume Flythroughs"
+    },
+    "Uranus": {
+      "id": "uranus",
+      "name": "Uranus",
+      "type": "Ice Giant",
+      "parent_body": "Sun",
+      "icon": "♅",
+      "color": "#38bdf8",
+      "physical": {
+        "radius_km": 25362.0,
+        "mass_1e24_kg": 86.810,
+        "density_g_cm3": 1.270,
+        "surface_gravity_m_s2": 8.87,
+        "escape_velocity_km_s": 21.30,
+        "rotation_period_hours": -17.24,
+        "orbital_period_days": 30685.4,
+        "axial_tilt_deg": 97.77,
+        "distance_from_sun_au": 19.191,
+        "number_of_moons": 28
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 100.0,
+        "pressure_display": "100+ bar (Deep ice giant fluid mantle)",
+        "composition": [
+          {"gas": "Hydrogen (H₂)", "percentage": 82.5},
+          {"gas": "Helium (He)", "percentage": 15.2},
+          {"gas": "Methane (CH₄)", "percentage": 2.3},
+          {"gas": "Hydrogen Deuteride (HD)", "percentage": 0.015}
+        ],
+        "magnetosphere": "Tilted corkscrew magnetosphere (59° off rotational axis, displaced 1/3 radius)",
+        "greenhouse_effect": "Uniquely low internal heat emission compared to other giants",
+        "weather_notes": "Extreme seasonal atmospheric swings due to rolling-ball 98° axial tilt; methane clouds & storms."
+      },
+      "environmental": {
+        "mean_temp_c": -195,
+        "min_temp_c": -224,
+        "max_temp_c": -180,
+        "radiation_level": "Moderate trapped radiation belts in twisted magnetosphere",
+        "radiation_tier": "Moderate",
+        "surface_type": "No solid surface; dense supercritical water, ammonia, and methane ice mantle",
+        "water_or_ice": "Enormous volatile ice reservoir (~65% of planetary mass is water/ammonia/methane 'ices')",
+        "geological_activity": "Internal convective transport and diamond precipitation potential",
+        "habitability_notes": "Harsh cryogenic deep space destination; prime target for future orbiter atmospheric probes."
+      },
+      "sources": "NASA Voyager 2 Data & Hubble / JWST Spectroscopy"
+    },
+    "Neptune": {
+      "id": "neptune",
+      "name": "Neptune",
+      "type": "Ice Giant",
+      "parent_body": "Sun",
+      "icon": "♆",
+      "color": "#6366f1",
+      "physical": {
+        "radius_km": 24622.0,
+        "mass_1e24_kg": 102.41,
+        "density_g_cm3": 1.638,
+        "surface_gravity_m_s2": 11.15,
+        "escape_velocity_km_s": 23.50,
+        "rotation_period_hours": 16.11,
+        "orbital_period_days": 60189.0,
+        "axial_tilt_deg": 28.32,
+        "distance_from_sun_au": 30.07,
+        "number_of_moons": 16
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 100.0,
+        "pressure_display": "100+ bar (Supersonic fluid envelope)",
+        "composition": [
+          {"gas": "Hydrogen (H₂)", "percentage": 80.0},
+          {"gas": "Helium (He)", "percentage": 19.0},
+          {"gas": "Methane (CH₄)", "percentage": 1.5},
+          {"gas": "Hydrogen Deuteride (HD)", "percentage": 0.019}
+        ],
+        "magnetosphere": "Tilted offset magnetosphere (47° tilt, offset by 0.55 radii from core)",
+        "greenhouse_effect": "Vigorous internal heat source (radiates 2.6x energy absorbed from faint Sun)",
+        "weather_notes": "Fastest winds in Solar System reaching 2,100 km/h; dynamic Great Dark Spot storms."
+      },
+      "environmental": {
+        "mean_temp_c": -200,
+        "min_temp_c": -218,
+        "max_temp_c": -185,
+        "radiation_level": "Moderate deep-space radiation belts",
+        "radiation_tier": "Moderate",
+        "surface_type": "No solid surface; high-pressure liquid mantle of water, methane, and ammonia",
+        "water_or_ice": "Dense fluid ionic water ocean under megabar pressures surrounding small silicate core",
+        "geological_activity": "Dynamic high-velocity atmospheric vortex generation",
+        "habitability_notes": "Outermost major planet; requires nuclear propulsion (RTG/Fission) due to solar flux <0.1% Earth."
+      },
+      "sources": "NASA Voyager 2 Data & JWST NIRCam Observations (2022-2024)"
+    },
+    "Triton": {
+      "id": "triton",
+      "name": "Triton",
+      "type": "Major Moon",
+      "parent_body": "Neptune",
+      "icon": "❄️",
+      "color": "#a7f3d0",
+      "physical": {
+        "radius_km": 1353.4,
+        "mass_1e24_kg": 0.0214,
+        "density_g_cm3": 2.061,
+        "surface_gravity_m_s2": 0.779,
+        "escape_velocity_km_s": 1.455,
+        "rotation_period_hours": -141.0,
+        "orbital_period_days": 5.877,
+        "axial_tilt_deg": 156.88,
+        "distance_from_sun_au": 30.07,
+        "number_of_moons": 0
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1.4e-5,
+        "pressure_display": "1.4 × 10⁻⁵ bar (14 microbars, Nitrogen Atmosphere)",
+        "composition": [
+          {"gas": "Molecular Nitrogen (N₂)", "percentage": 99.0},
+          {"gas": "Carbon Monoxide (CO)", "percentage": 0.9},
+          {"gas": "Methane (CH₄)", "percentage": 0.1}
+        ],
+        "magnetosphere": "None; embedded inside Neptune's eccentric magnetosphere",
+        "greenhouse_effect": "Negligible",
+        "weather_notes": "High nitrogen ice clouds and wind streaks driven by subsurface sublimation."
+      },
+      "environmental": {
+        "mean_temp_c": -235,
+        "min_temp_c": -240,
+        "max_temp_c": -230,
+        "radiation_level": "Moderate interplanetary cosmic ray environment",
+        "radiation_tier": "Moderate",
+        "surface_type": "Cantaloupe terrain made of diapiric nitrogen, water, and methane ice crust",
+        "water_or_ice": "Solid frozen nitrogen surface covering deep water-ice crust and probable subsurface ocean",
+        "geological_activity": "Active nitrogen cryogeysers erupting up to 8 km high carrying dark organic tholins",
+        "habitability_notes": "Captured Kuiper Belt Object in retrograde orbit; tidal dissipation maintains potential interior ocean."
+      },
+      "sources": "Voyager 2 Flyby Analysis & New Horizons Outer Solar System Studies"
+    },
+    "Pluto": {
+      "id": "pluto",
+      "name": "Pluto",
+      "type": "Dwarf Planet",
+      "parent_body": "Sun",
+      "icon": "♇",
+      "color": "#e2e8f0",
+      "physical": {
+        "radius_km": 1188.3,
+        "mass_1e24_kg": 0.01303,
+        "density_g_cm3": 1.854,
+        "surface_gravity_m_s2": 0.62,
+        "escape_velocity_km_s": 1.21,
+        "rotation_period_hours": -153.3,
+        "orbital_period_days": 90560.0,
+        "axial_tilt_deg": 122.53,
+        "distance_from_sun_au": 39.48,
+        "number_of_moons": 5
+      },
+      "atmospheric": {
+        "surface_pressure_bar": 1e-5,
+        "pressure_display": "10⁻⁵ bar (10 microbars, Faint Seasonal Atmosphere)",
+        "composition": [
+          {"gas": "Nitrogen (N₂)", "percentage": 99.0},
+          {"gas": "Methane (CH₄)", "percentage": 0.5},
+          {"gas": "Carbon Monoxide (CO)", "percentage": 0.5}
+        ],
+        "magnetosphere": "None",
+        "greenhouse_effect": "Anti-greenhouse methane effect cooling the upper atmosphere",
+        "weather_notes": "Seasonal atmospheric freezing: atmosphere slowly collapses onto surface as Pluto moves toward aphelion."
+      },
+      "environmental": {
+        "mean_temp_c": -225,
+        "min_temp_c": -240,
+        "max_temp_c": -218,
+        "radiation_level": "Moderate-High galactic cosmic ray bombardment",
+        "radiation_tier": "High",
+        "surface_type": "Nitrogen-ice glaciers (Sputnik Planitia), water-ice mountains rising 3,500m, tholin stains",
+        "water_or_ice": "Vast nitrogen/carbon monoxide ice fields and liquid water-ammonia ocean beneath Sputnik Planitia",
+        "geological_activity": "Active cellular ice convection and cryovolcanic domes (Wright Mons, Piccard Mons)",
+        "habitability_notes": "Complex geologically youthful world with subsurface ocean despite receiving 1/1600th Earth solar flux."
+      },
+      "sources": "NASA New Horizons Science Team (2015-2023 Published Catalogs)"
+    }
+  },
+  "presets": [
+    {
+      "id": "earth-mars",
+      "name": "Earth vs Mars",
+      "description": "Baseline terrestrial vs primary exploration destination",
+      "bodies": ["Earth", "Mars"],
+      "recommended_mission": "Crewed"
+    },
+    {
+      "id": "europa-enceladus",
+      "name": "Europa vs Enceladus",
+      "description": "Battle of the ocean worlds and prime astrobiology candidates",
+      "bodies": ["Europa", "Enceladus"],
+      "recommended_mission": "Lander"
+    },
+    {
+      "id": "moon-mars",
+      "name": "Moon vs Mars",
+      "description": "Near-term Artemis proving ground vs long-term settlement horizon",
+      "bodies": ["Moon", "Mars"],
+      "recommended_mission": "Colony"
+    },
+    {
+      "id": "venus-titan",
+      "name": "Venus vs Titan",
+      "description": "Extreme dense atmospheres: Supercritical hell vs Cryogenic methane lakes",
+      "bodies": ["Venus", "Titan"],
+      "recommended_mission": "Orbiter"
+    },
+    {
+      "id": "mercury-moon",
+      "name": "Mercury vs Moon",
+      "description": "Airless, cratered inner bodies with extreme diurnal thermal swings",
+      "bodies": ["Mercury", "Moon"],
+      "recommended_mission": "Lander"
+    },
+    {
+      "id": "jupiter-saturn",
+      "name": "Jupiter vs Saturn",
+      "description": "The Solar System's massive gas titans compared",
+      "bodies": ["Jupiter", "Saturn"],
+      "recommended_mission": "Flyby"
+    }
+  ]
+}

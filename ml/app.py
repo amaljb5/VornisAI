@@ -6,16 +6,31 @@ Single-Page Unified Dashboard featuring:
 2. 🧠 AI Vehicle Design Recommendations
 3. 🪐 Planetary Environment Intelligence
 4. ⚡ Launch & Transfer Physics Dynamics
+5. 🔬 Planetary Comparison & Mission Analysis
 """
 
 import json
 import math
+import sys
 from pathlib import Path
 
 import joblib
 import numpy as np
 import pandas as pd
 import streamlit as st
+
+# Make the shared planetary-analysis modules available when launched by Streamlit.
+PROJECT_DIR = Path(__file__).resolve().parent.parent
+if str(PROJECT_DIR) not in sys.path:
+    sys.path.insert(0, str(PROJECT_DIR))
+
+from api.ai_analysis import generate_comparative_analysis
+from api.feasibility_engine import (
+    MISSION_TYPES,
+    SUB_SCORE_METADATA,
+    compare_and_rank_bodies,
+)
+from api.planetary_data import PLANETARY_DATA, PRESETS
 
 # ── Paths ─────────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent
@@ -165,6 +180,127 @@ def load_resources():
 
 model, meta = load_resources()
 
+def render_planetary_comparison():
+    st.markdown(
+        "<div class='section-title'>🔬 Planetary Comparison & Mission Analysis</div>",
+        unsafe_allow_html=True,
+    )
+    st.caption(
+        "Compare mission feasibility across 19 planets, dwarf planets, and major moons."
+    )
+
+    preset_names = {preset["name"]: preset["bodies"] for preset in PRESETS}
+
+    def apply_comparison_preset():
+        selected_preset = st.session_state["comparison_preset"]
+        if selected_preset in preset_names:
+            st.session_state["comparison_bodies"] = preset_names[selected_preset]
+
+    preset_name = st.selectbox(
+        "Quick comparison",
+        ["Custom"] + list(preset_names),
+        key="comparison_preset",
+        on_change=apply_comparison_preset,
+    )
+    default_bodies = preset_names.get(preset_name, ["Earth", "Mars"])
+    selected_bodies = st.multiselect(
+        "Celestial bodies (select 2–4)",
+        options=list(PLANETARY_DATA),
+        default=default_bodies,
+        max_selections=4,
+        key="comparison_bodies",
+    )
+    mission_type = st.selectbox("Mission architecture", MISSION_TYPES, index=3)
+
+    if not 2 <= len(selected_bodies) <= 4:
+        st.info("Select between 2 and 4 celestial bodies to compare.")
+        return
+
+    bodies = [PLANETARY_DATA[name] for name in selected_bodies]
+    results = compare_and_rank_bodies(bodies, mission_type)
+    scores = pd.DataFrame(
+        {
+            "Feasibility score": {
+                result["body_name"]: result["overall_score"] for result in results
+            }
+        }
+    )
+
+    score_tab, analysis_tab, details_tab = st.tabs(
+        ["Feasibility scores", "AI analysis", "Body details"]
+    )
+    with score_tab:
+        st.bar_chart(scores, y="Feasibility score", color="#38bdf8")
+        for result in results:
+            st.markdown(
+                f"**#{result['rank']} {result['body_name']}** — "
+                f"{result['overall_score']:.1f}/100 · {result['tier']}"
+            )
+        with st.expander("View sub-scores"):
+            score_table = pd.DataFrame(
+                {
+                    result["body_name"]: result["sub_scores"]
+                    for result in results
+                }
+            ).rename(index={key: value["label"] for key, value in SUB_SCORE_METADATA.items()})
+            st.dataframe(score_table, use_container_width=True)
+
+    with analysis_tab:
+        if st.button("Generate comparative analysis", type="primary"):
+            with st.spinner("Analyzing mission trade-offs..."):
+                st.session_state["planetary_analysis"] = generate_comparative_analysis(
+                    bodies, mission_type, results
+                )
+                st.session_state["planetary_analysis_key"] = (
+                    tuple(selected_bodies),
+                    mission_type,
+                )
+
+        analysis_key = (tuple(selected_bodies), mission_type)
+        analysis = st.session_state.get("planetary_analysis")
+        if st.session_state.get("planetary_analysis_key") == analysis_key and analysis:
+            st.caption(f"Analysis mode: {analysis['generation_mode']}")
+            st.markdown(analysis["summary"])
+            st.markdown("#### Key differences")
+            for difference in analysis["key_differences"]:
+                st.markdown(f"- {difference}")
+
+            recommendation = analysis["mission_recommendation"]
+            st.markdown("#### Mission recommendation")
+            st.success(
+                f"**{recommendation['recommended_body']}** — "
+                f"{recommendation['rationale']}\n\n"
+                f"{recommendation['mission_architecture_advice']}"
+            )
+            for name, assessment in analysis["body_assessments"].items():
+                with st.expander(f"{name}: strengths and risks"):
+                    st.markdown("**Strengths**")
+                    for strength in assessment["strengths"]:
+                        st.markdown(f"- {strength}")
+                    st.markdown("**Risks**")
+                    for risk in assessment["risks"]:
+                        st.markdown(f"- {risk}")
+            st.markdown("#### Uncertainties and open questions")
+            for question in analysis["uncertainties_and_open_questions"]:
+                st.markdown(f"- {question}")
+        else:
+            st.info("Generate an analysis to see a mission recommendation and trade-offs.")
+
+    with details_tab:
+        for body in bodies:
+            physical = body["physical"]
+            atmosphere = body["atmospheric"]
+            environment = body["environmental"]
+            with st.expander(body["name"]):
+                st.write(body["type"])
+                st.write(
+                    f"Gravity: {physical['surface_gravity_m_s2']} m/s² · "
+                    f"Temperature: {environment['mean_temp_c']} °C · "
+                    f"Pressure: {atmosphere['pressure_display']}"
+                )
+                st.write(f"Radiation: {environment['radiation_tier']}")
+                st.write(f"Water / ice: {environment['water_or_ice']}")
+
 # ── Planetary Database Dictionary ──────────────────────────────────────────
 PLANETS_DB = {
     "Mercury": {"dist": 0.387, "mass": 0.330, "radius": 2439, "gravity": 3.70, "temp": 167, "press": 1e-11, "mag": 0, "gas": 0, "solid": 1, "desc": "Extreme thermal fluctuations, high solar radiation, thin exosphere."},
@@ -191,6 +327,18 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
+
+# ── Sidebar Inputs ────────────────────────────────────────────────────────
+with st.sidebar:
+    app_section = st.radio(
+        "VornisAI modules",
+        ["Mission Design", "Planetary Comparison"],
+        key="app_section",
+    )
+
+if app_section == "Planetary Comparison":
+    render_planetary_comparison()
+    st.stop()
 
 # ── Sidebar Inputs ────────────────────────────────────────────────────────
 with st.sidebar:
